@@ -13,7 +13,10 @@ import (
 // what if we could create the type room like this
 
 type room struct {
-	room map[string][]interface{}
+	name string
+	x int
+	y int 
+
 }
 
 type colony struct {
@@ -21,7 +24,7 @@ type colony struct {
 	end        int
 	start_room room
 	end_room   room
-	rooms      []room
+	rooms      map[string][]interface{}
 	// tunnels []tunnel
 }
 
@@ -39,20 +42,29 @@ func NewColony() colony {
 		end:        0,
 		start_room: NewRoom(),
 		end_room:   NewRoom(),
-		rooms:      make([]room, 0),
+		rooms:      make(map[string][]interface{}, 0),
 	}
 }
 
 func NewRoom() room {
 	return room{
-		room: make(map[string][]interface{}),
+		name :"",
+		x:-1,
+		y:-1,
 	}
 }
 
 // the function must check before adding a room to the colony
 
-func (c *colony) addRoom(r ...room) {
-	c.rooms = append(c.rooms, r...)
+func (c *colony) addRoom(r room) error {
+	for key  := range c.rooms {
+		if _, ok := c.rooms[key]; ok {
+			return errors.New("Error: there is a replicate room")
+		} 
+
+	}
+	c.rooms[room.name]=[]int{room.x, room.y}
+	return nil 
 }
 
 func (r *room) setRoom(key string, value ...interface{}) {
@@ -114,11 +126,11 @@ func Parse(filename string) (*colony, error) {
 					return nil, errors.New("ERROR: No end Found")
 				}
 			} else {
-				ok, chunks :=CheckIsRoom(line, scanner.Bytes())
-				if ok{
-					new_room:=NewRoom()
-                    new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					colony.rooms=append(colony.rooms,new_room)
+				ok, chunks := CheckIsRoom(line, scanner.Bytes())
+				if ok {
+					new_room := NewRoom()
+					new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
+					colony.rooms = append(colony.rooms, new_room)
 				}
 			}
 
@@ -152,7 +164,6 @@ func CheckIsComment(line_number int, line []byte) bool {
 	return !start_line.Match(line) && !end_line.Match(line) && comment.Match(line)
 }
 
-
 func toInt(bytes []byte) int {
 	result := 0
 	for _, bt := range bytes {
@@ -161,10 +172,8 @@ func toInt(bytes []byte) int {
 	return result
 }
 
-
-
 func (c colony) String() string {
 	return fmt.Sprintf("Colony(Start : %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v)", c.start, c.end, c.start_room, c.end_room, c.rooms)
 }
 
-//slice is not optimized for this 
+// slice is not optimized for this
