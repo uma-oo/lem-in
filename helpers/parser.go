@@ -14,9 +14,8 @@ import (
 
 type room struct {
 	name string
-	x int
-	y int 
-
+	x    int
+	y    int
 }
 
 type colony struct {
@@ -34,41 +33,46 @@ var (
 	comment         = regexp.MustCompile("^#")
 	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
 	roomCoordinates = regexp.MustCompile("[0-9]+")
+	emptyline       = regexp.MustCompile("^\\s*$")
 )
 
 func NewColony() colony {
 	return colony{
 		start:      0,
 		end:        0,
-		start_room: NewRoom(),
-		end_room:   NewRoom(),
-		rooms:      make(map[string][]interface{}, 0),
+		start_room: NewRoom("", -1, -1),
+		end_room:   NewRoom("", -1, -1),
+		rooms:      make(map[string][]interface{}),
 	}
 }
 
-func NewRoom() room {
+func NewRoom(name string, x int, y int) room {
 	return room{
-		name :"",
-		x:-1,
-		y:-1,
+		name: name,
+		x:    x,
+		y:    y,
 	}
+}
+
+func (r *room) setRoom(name string, x int, y int) {
+	r.name = name
+	r.x = x
+	r.y = y
 }
 
 // the function must check before adding a room to the colony
 
-func (c *colony) addRoom(r room) error {
-	for key  := range c.rooms {
-		if _, ok := c.rooms[key]; ok {
-			return errors.New("Error: there is a replicate room")
-		} 
-
+func (c *colony) addRoom(r ...room) error {
+	// check if the room will be adding exists already
+	for _, ele := range r {
+		if _, ok := c.rooms[ele.name]; ok {
+			// do something here
+			return errors.New("ERROR: room is replicated")
+		} else {
+			c.rooms[ele.name] = append(c.rooms[ele.name], ele.x, ele.y)
+		}
 	}
-	c.rooms[room.name]=[]int{room.x, room.y}
-	return nil 
-}
-
-func (r *room) setRoom(key string, value ...interface{}) {
-	r.room[key] = value
+	return nil
 }
 
 func Parse(filename string) (*colony, error) {
@@ -100,7 +104,9 @@ func Parse(filename string) (*colony, error) {
 			if CheckIsComment(line, scanner.Bytes()) {
 				continue
 			}
-			if start_line.Match(scanner.Bytes()) && !start_found {
+			if emptyline.Match(scanner.Bytes()) {
+				continue
+			} else if start_line.Match(scanner.Bytes()) && !start_found {
 				start_found = true
 				colony.start = line + 1
 			} else if start_line.Match(scanner.Bytes()) && start_found {
@@ -121,16 +127,22 @@ func Parse(filename string) (*colony, error) {
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
 					colony.end_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					colony.addRoom(colony.start_room, colony.end_room)
+					err := colony.addRoom(colony.start_room, colony.end_room)
+					if err != nil {
+						return nil, err
+					}
 				} else {
 					return nil, errors.New("ERROR: No end Found")
 				}
 			} else {
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
-					new_room := NewRoom()
+					new_room := NewRoom("", -1, -1)
 					new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					colony.rooms = append(colony.rooms, new_room)
+					err := colony.addRoom(new_room)
+					if err != nil {
+						return nil, err
+					}
 				}
 			}
 
