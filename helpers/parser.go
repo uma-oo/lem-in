@@ -6,53 +6,26 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 	"strconv"
-)
-
-// what if we could create the type room like this
-
-type room struct {
-	name  string
-	x     int
-	y     int
-	links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link 
-}
-
-type colony struct {
-	start      int
-	end        int
-	start_room room
-	end_room   room
-	rooms      map[string][]interface{}
-	// tunnels    map[string][]string
-}
-
-var (
-	start_line      = regexp.MustCompile("^##start$")
-	end_line        = regexp.MustCompile("^##end$")
-	comment         = regexp.MustCompile("^#")
-	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
-	roomCoordinates = regexp.MustCompile("[0-9]+")
-	emptyline       = regexp.MustCompile(`^\\s*$`)
-	is_tunnel       = regexp.MustCompile(`^([a-zA-Z0-9]+)[-]([a-zA-Z0-9]+)$`)
 )
 
 func NewColony() colony {
 	return colony{
 		start:      0,
 		end:        0,
-		start_room: NewRoom("", -1, -1),
-		end_room:   NewRoom("", -1, -1),
-		rooms:      make(map[string][]interface{}),
+		start_room: NewRoom(),
+		end_room:   NewRoom(),
+		rooms_coor: make(map[string][]interface{}),
+		tunnels:    make(map[string]*room),
 	}
 }
 
-func NewRoom(name string, x int, y int) room {
-	return room{
-		name: name,
-		x:    x,
-		y:    y,
+func NewRoom() *room {
+	return &room{
+		name:  "",
+		x:     -1,
+		y:     -1,
+		Links: map[string]struct{}{},
 	}
 }
 
@@ -62,16 +35,20 @@ func (r *room) setRoom(name string, x int, y int) {
 	r.y = y
 }
 
+func (r *room) setLinks(link map[string]struct{}) {
+	r.Links = link
+}
+
 // the function must check before adding a room to the colony
 
-func (c *colony) addRoom(r ...room) error {
+func (c *colony) addRoom(r ...*room) error {
 	// check if the room will be adding exists already
 	for _, ele := range r {
-		if _, ok := c.rooms[ele.name]; ok {
+		if _, ok := c.rooms_coor[ele.name]; ok {
 			// do something here
 			return errors.New("ERROR: room is replicated")
 		} else {
-			c.rooms[ele.name] = append(c.rooms[ele.name], ele.x, ele.y)
+			c.rooms_coor[ele.name] = append(c.rooms_coor[ele.name], ele.x, ele.y)
 		}
 	}
 	return nil
@@ -137,11 +114,14 @@ func Parse(filename string) (*colony, error) {
 					return nil, errors.New("ERROR: No end Found")
 				}
 			} else if is_tunnel.Match(scanner.Bytes()) {
-				// HandleTunnels(line , scanner.Bytes())
+				err := HandleTunnels(&colony, scanner.Bytes(), line)
+				if err != nil {
+					return nil, err
+				}
 			} else {
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
-					new_room := NewRoom("", -1, -1)
+					new_room := NewRoom()
 					new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
 					err := colony.addRoom(new_room)
 					if err != nil {
@@ -189,15 +169,13 @@ func toInt(bytes []byte) int {
 }
 
 func (c colony) String() string {
-	return fmt.Sprintf("Colony(Start : %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v)", c.start, c.end, c.start_room, c.end_room, c.rooms)
+	return fmt.Sprintf("Colony(Start : %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v , Links: %v)", c.start, c.end, c.start_room, c.end_room, c.rooms_coor, c.tunnels)
 }
 
 // slice is not optimized for this // done
 
 // Check if 2 rooms have the same coordinates block of fcts
 // use a hash function
-
-
 
 // fucntion to check if the the tunnel found fih ghir 2
 func CheckTunnels(line int, line_content []byte) ([][]byte, error) {
@@ -210,17 +188,26 @@ func CheckTunnels(line int, line_content []byte) ([][]byte, error) {
 
 // function to check if the the pieces found rooms nit wlla walu
 
-func HandleTunnels(col *colony, line_content []byte, line int, r *room) error {
+func HandleTunnels(col *colony, line_content []byte, line int) error {
 	chunks, err := CheckTunnels(line, line_content)
+	fmt.Println(string(chunks[0]), string(chunks[1]))
+	var ok bool
 	if err != nil {
-		_, ok1 := col.rooms[string(chunks[0])]
-		_, ok2 := col.rooms[string(chunks[1])]
-		ok := ok1 && ok2
+		return err
+	} else {
+		_, ok1 := col.rooms_coor[string(chunks[0])]
+		_, ok2 := col.rooms_coor[string(chunks[1])]
+
+		ok = ok1 && ok2
+
 		switch ok {
 		case false:
 			return errors.New("ERROR: the room in this tunnel doesn't exist")
-		case true :
-
+		case true:
+			err := checkConnection(string(chunks[0]), string(chunks[1]), col)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -228,16 +215,23 @@ func HandleTunnels(col *colony, line_content []byte, line int, r *room) error {
 
 // func to check if the rooms is already related to each other
 // this is really getting more longer than expected
-func checkConnection(room1 room, room2 room, col *colony) error {
-	// 
-	if _ , ok := room1.links[room2.name]; ok {
-		//l9ina room2 deja kayna
-		return errors.New("ERROR: the link already exists")
-	} else {
-		err := checkConnection(room2, room1, col)
-		if err != nil {
-
+func checkConnection(room1_key string, room2_key string, col *colony) error {
+	//
+	if value, ok := col.tunnels[room1_key]; ok {
+		// l9ina room2 deja kayna
+		if _, ok := value.Links[room2_key]; ok {
+			return errors.New("ERROR: this connection already exists")
+		} else {
+			fmt.Println("HERE")
+			value.Links[room2_key] = struct{}{}
 		}
+	} else {
+		value.Links[room2_key] = struct{}{}
+		col.tunnels[room1_key] = value
+
+		fmt.Println("THERE")
+		// value.setLinks()
 	}
-	return nil 
+	// we don't need to check if the room2 already contains room1 link because when adding, we add them both to each other
+	return nil
 }
