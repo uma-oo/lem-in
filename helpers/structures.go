@@ -12,6 +12,7 @@ type room struct {
 }
 
 type colony struct {
+	ants       int
 	start      int
 	end        int
 	start_room *room

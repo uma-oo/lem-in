@@ -12,6 +12,7 @@ import (
 
 func NewColony() colony {
 	return colony{
+		ants:       0,
 		start:      0,
 		end:        0,
 		start_room: NewRoom("", -1, -1),
@@ -72,6 +73,7 @@ func Parse(filename string) (*colony, error) {
 
 		if line == 1 {
 			if CheckAnts(scanner.Bytes()) {
+				colony.ants, _ = strconv.Atoi(string(scanner.Bytes()))
 				continue
 			} else {
 				return nil, errors.New("ERROR: invalid number of Ants")
@@ -166,7 +168,7 @@ func toInt(bytes []byte) int {
 }
 
 func (c colony) String() string {
-	return fmt.Sprintf("Colony(Start : %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.start, c.end, c.start_room, c.end_room, c.rooms_coor)
+	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.ants, c.start, c.end, c.start_room, c.end_room, c.rooms_coor)
 }
 
 // slice is not optimized for this // done
@@ -199,8 +201,9 @@ func HandleTunnels(col *colony, line_content []byte, line int) error {
 		case false:
 			return errors.New("ERROR: the room in this tunnel doesn't exist " + strconv.Itoa(line))
 		case true:
-			err := checkConnection(string(chunks[0]), string(chunks[1]), col)
-			if err != nil {
+			err1 := checkConnection(string(chunks[0]), string(chunks[1]), col)
+			err2 := checkConnection(string(chunks[1]), string(chunks[0]), col)
+			if err1 != nil || err2 != nil {
 				return err
 			}
 		}
@@ -239,6 +242,8 @@ func checkConnection(room1_key string, room2_key string, col *colony) error {
 	// we don't need to check if the room2 already contains room1 link because when adding, we add them both to each other
 	return nil
 }
+
+// this function is here to just show us the links :<)=
 
 func (c *colony) PrintLinks(links map[string]*room) {
 	for key, value := range links {
