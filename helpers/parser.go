@@ -7,24 +7,25 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func NewColony() colony {
 	return colony{
 		start:      0,
 		end:        0,
-		start_room: NewRoom(),
-		end_room:   NewRoom(),
+		start_room: NewRoom("",-1,-1),
+		end_room:   NewRoom("",-1,-1),
 		rooms_coor: make(map[string][]interface{}),
 		tunnels:    make(map[string]*room),
 	}
 }
 
-func NewRoom() *room {
+func NewRoom(name string, x int, y int ) *room {
 	return &room{
-		name:  "",
-		x:     -1,
-		y:     -1,
+		name:  name,
+		x:     x,
+		y:     y,
 		Links: map[string]struct{}{},
 	}
 }
@@ -33,10 +34,6 @@ func (r *room) setRoom(name string, x int, y int) {
 	r.name = name
 	r.x = x
 	r.y = y
-}
-
-func (r *room) setLinks(link map[string]struct{}) {
-	r.Links = link
 }
 
 // the function must check before adding a room to the colony
@@ -89,12 +86,12 @@ func Parse(filename string) (*colony, error) {
 				start_found = true
 				colony.start = line + 1
 			} else if start_line.Match(scanner.Bytes()) && start_found {
-				return nil, errors.New("ERROR: too many starts")
+				return nil, errors.New("ERROR: too many starts at line: "+ strconv.Itoa(line))
 			} else if end_line.Match(scanner.Bytes()) && !end_found {
 				end_found = true
 				colony.end = line + 1
 			} else if end_line.Match(scanner.Bytes()) && end_found {
-				return nil, errors.New("ERROR: too many ends")
+				return nil, errors.New("ERROR: too many ends at line: "+ strconv.Itoa(line))
 			} else if line == colony.start {
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
@@ -113,7 +110,7 @@ func Parse(filename string) (*colony, error) {
 				} else {
 					return nil, errors.New("ERROR: No end Found")
 				}
-			} else if is_tunnel.Match(scanner.Bytes()) {
+			} else if strings.Contains(string(scanner.Bytes()),"-") {
 				err := HandleTunnels(&colony, scanner.Bytes(), line)
 				if err != nil {
 					return nil, err
@@ -121,7 +118,7 @@ func Parse(filename string) (*colony, error) {
 			} else {
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
-					new_room := NewRoom()
+					new_room := NewRoom("",-1,-1)
 					new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
 					err := colony.addRoom(new_room)
 					if err != nil {
@@ -169,7 +166,7 @@ func toInt(bytes []byte) int {
 }
 
 func (c colony) String() string {
-	return fmt.Sprintf("Colony(Start : %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v , Links: %v)", c.start, c.end, c.start_room, c.end_room, c.rooms_coor, c.tunnels)
+	return fmt.Sprintf("Colony(Start : %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v , Links: %v)", c.start, c.end, c.start_room, c.end_room, c.rooms_coor, c.tunnels["4"])
 }
 
 // slice is not optimized for this // done
@@ -190,7 +187,6 @@ func CheckTunnels(line int, line_content []byte) ([][]byte, error) {
 
 func HandleTunnels(col *colony, line_content []byte, line int) error {
 	chunks, err := CheckTunnels(line, line_content)
-	fmt.Println(string(chunks[0]), string(chunks[1]))
 	var ok bool
 	if err != nil {
 		return err
@@ -199,10 +195,9 @@ func HandleTunnels(col *colony, line_content []byte, line int) error {
 		_, ok2 := col.rooms_coor[string(chunks[1])]
 
 		ok = ok1 && ok2
-
 		switch ok {
 		case false:
-			return errors.New("ERROR: the room in this tunnel doesn't exist")
+			return errors.New("ERROR: the room in this tunnel doesn't exist "+ strconv.Itoa(line))
 		case true:
 			err := checkConnection(string(chunks[0]), string(chunks[1]), col)
 			if err != nil {
@@ -218,20 +213,28 @@ func HandleTunnels(col *colony, line_content []byte, line int) error {
 func checkConnection(room1_key string, room2_key string, col *colony) error {
 	//
 	if value, ok := col.tunnels[room1_key]; ok {
+		fmt.Println("DKHL LHIH ")
 		// l9ina room2 deja kayna
 		if _, ok := value.Links[room2_key]; ok {
 			return errors.New("ERROR: this connection already exists")
 		} else {
-			fmt.Println("HERE")
 			value.Links[room2_key] = struct{}{}
 		}
 	} else {
-		value.Links[room2_key] = struct{}{}
-		col.tunnels[room1_key] = value
+		//This is working but i have no clue on the why behind but hadshi jamil 
+		// 7bbiiiit 
+		fmt.Println("DKHL HNA ")
+		value1:=NewRoom(room1_key, col.rooms_coor[room1_key][0].(int), col.rooms_coor[room1_key][1].(int))
+		value2:=NewRoom(room2_key, col.rooms_coor[room2_key][0].(int), col.rooms_coor[room2_key][1].(int))
+		value1.Links[room2_key] = struct{}{}
+		value2.Links[room1_key]=struct{}{}
+		col.tunnels[room1_key] = value1
+		col.tunnels[room2_key]=value2
 
-		fmt.Println("THERE")
 		// value.setLinks()
 	}
 	// we don't need to check if the room2 already contains room1 link because when adding, we add them both to each other
 	return nil
 }
+
+

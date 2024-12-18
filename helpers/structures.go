@@ -29,5 +29,5 @@ var (
 	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
 	roomCoordinates = regexp.MustCompile("[0-9]+")
 	emptyline       = regexp.MustCompile(`^\\s*$`)
-	is_tunnel       = regexp.MustCompile(`^([a-zA-Z0-9]+)[-]([a-zA-Z0-9]+)$`)
+	// is_tunnel       = regexp.MustCompile(`^([a-zA-Z0-9]+)[-]([a-zA-Z0-9]+)$`)
 )
