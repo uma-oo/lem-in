@@ -17,7 +17,7 @@ type colony struct {
 	start_room *room
 	end_room   *room
 	rooms_coor map[string][]interface{}
-	tunnels    map[string]*room
+	Tunnels    map[string]*room
 
 	// tunnels    map[string][]string
 }
