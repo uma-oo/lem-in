@@ -1,6 +1,8 @@
 package helpers
 
 // handles only positove coordinates
+
+
 func szudzikPair(x int, y int) int {
 	if x >= y {
 		return (x * x) + x + y
@@ -8,6 +10,8 @@ func szudzikPair(x int, y int) int {
 	return (y * y) + x
 }
 
+
+//handles negative numbers and big sets too 
 func szudzikPairSigned(x int, y int) int {
 	c := szudzikPair(convert(x), convert(y))
 
