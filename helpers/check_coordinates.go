@@ -1,15 +1,28 @@
 package helpers
 
+// handles only positove coordinates
+func szudzikPair(x int, y int) int {
+	if x >= y {
+		return (x * x) + x + y
+	}
+	return (y * y) + x
+}
 
-// if x >= 0.0 {
-// 	a = 2.0*x
-// } else {
-// 	a = (-2.0*x)-1.0
-// }
+func szudzikPairSigned(x int, y int) int {
+	var c int
 
+	c = szudzikPair(convert(x), convert(y))
 
+	if ((x >= 0) && (y < 0)) || ((x < 0) && (y >= 0)) {
+		return -c - 1
+	}
 
+	return c
+}
 
-
-
-
+func convert(a int) int {
+	if a >= 0 {
+		return 2 * a
+	}
+	return (2 * a) * -1
+}

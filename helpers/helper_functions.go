@@ -30,14 +30,30 @@ func CheckIsRoom(line_number int, line []byte) (bool, [][]byte) {
 	return false, nil
 }
 
+// func CheckRoomIsDuplicate(x int , y int) bool {
+   
+// }
+
+
+
+
 func CheckIsComment(line_number int, line []byte) bool {
 	return !start_line.Match(line) && !end_line.Match(line) && comment.Match(line)
 }
 
+
+
+// need to add negative numbers  -> added :)
+
 func toInt(bytes []byte) int {
 	result := 0
-	for _, bt := range bytes {
+    sign:=1
+	for i, bt := range bytes {
+		if string(bt)=="-" && i==0{
+			sign=-1
+			continue
+		}
 		result = result*10 + int(bt-'0')
 	}
-	return result
+	return result*sign
 }

@@ -11,6 +11,15 @@ type room struct {
 	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
 }
 
+type coordinate struct {
+	x int 
+	y int 
+}
+
+var combinaison map[coordinate]struct{}
+
+
+
 type colony struct {
 	ants       int
 	start      int
@@ -28,7 +37,7 @@ var (
 	end_line        = regexp.MustCompile(`^##end\s*$`)
 	comment         = regexp.MustCompile("^#")
 	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
-	roomCoordinates = regexp.MustCompile("[0-9]+")
+	roomCoordinates = regexp.MustCompile("-?[0-9]+")
 	emptyline       = regexp.MustCompile(`^\s*$`)   // matches a empty line or line with spaces 
 	
 )
