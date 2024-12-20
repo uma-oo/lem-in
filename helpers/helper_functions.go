@@ -2,12 +2,13 @@ package helpers
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"strconv"
 )
 
 func Error(mssg any) {
-	fmt.Println("\033[31m"+fmt.Sprint(mssg)+"\033[0m")
+	fmt.Println("\033[31m" + fmt.Sprint(mssg) + "\033[0m")
 }
 
 func CheckAnts(line_content []byte) bool {
@@ -30,30 +31,30 @@ func CheckIsRoom(line_number int, line []byte) (bool, [][]byte) {
 	return false, nil
 }
 
-// func CheckRoomIsDuplicate(x int , y int) bool {
-   
-// }
+func CheckCoorIsDuplicate(x int, y int) error {
+	if _, ok := combinaison[szudzikPairSigned(x, y)]; ok {
+		return errors.New("ERROR: The coordinates of this room already exist")
+	}
+	combinaison[szudzikPairSigned(x, y)] = struct{}{}
 
-
-
+	return nil
+}
 
 func CheckIsComment(line_number int, line []byte) bool {
 	return !start_line.Match(line) && !end_line.Match(line) && comment.Match(line)
 }
 
-
-
 // need to add negative numbers  -> added :)
 
 func toInt(bytes []byte) int {
 	result := 0
-    sign:=1
+	sign := 1
 	for i, bt := range bytes {
-		if string(bt)=="-" && i==0{
-			sign=-1
+		if string(bt) == "-" && i == 0 {
+			sign = -1
 			continue
 		}
 		result = result*10 + int(bt-'0')
 	}
-	return result*sign
+	return result * sign
 }

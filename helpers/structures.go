@@ -11,12 +11,9 @@ type room struct {
 	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
 }
 
-type coordinate struct {
-	x int 
-	y int 
-}
 
-var combinaison map[coordinate]struct{}
+
+var combinaison = make(map[int]struct{})
 
 
 

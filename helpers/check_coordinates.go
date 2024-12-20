@@ -9,9 +9,7 @@ func szudzikPair(x int, y int) int {
 }
 
 func szudzikPairSigned(x int, y int) int {
-	var c int
-
-	c = szudzikPair(convert(x), convert(y))
+	c := szudzikPair(convert(x), convert(y))
 
 	if ((x >= 0) && (y < 0)) || ((x < 0) && (y >= 0)) {
 		return -c - 1

@@ -85,7 +85,10 @@ func Parse(filename string) (*colony, error) {
 				}
 
 			} else if ok, chunks := CheckIsRoom(line, scanner.Bytes()); ok {
-
+				err_coord := CheckCoorIsDuplicate(toInt(chunks[1]), toInt(chunks[2]))
+				if err_coord != nil {
+					return nil, err_coord
+				}
 				new_room := NewRoom()
 				new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
 
