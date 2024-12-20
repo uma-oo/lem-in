@@ -2,63 +2,21 @@ package helpers
 
 import (
 	"bufio"
-	"bytes"
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
 )
-
-func NewColony() colony {
-	return colony{
-		ants:       0,
-		start:      0,
-		end:        0,
-		start_room: NewRoom("", -1, -1),
-		end_room:   NewRoom("", -1, -1),
-		rooms_coor: make(map[string][]interface{}),
-		Tunnels:    make(map[string]*room),
-	}
-}
-
-func NewRoom(name string, x int, y int) *room {
-	return &room{
-		name:  name,
-		x:     x,
-		y:     y,
-		Links: map[string]struct{}{},
-	}
-}
-
-func (r *room) setRoom(name string, x int, y int) {
-	r.name = name
-	r.x = x
-	r.y = y
-}
-
-// the function must check before adding a room to the colony
-
-func (c *colony) addRoom(r ...*room) error {
-	// check if the room will be adding exists already
-	for _, ele := range r {
-		if _, ok := c.rooms_coor[ele.name]; ok {
-			// do something here
-			return errors.New("ERROR: room is replicated")
-		} else {
-			c.rooms_coor[ele.name] = append(c.rooms_coor[ele.name], ele.x, ele.y)
-		}
-	}
-	return nil
-}
 
 func Parse(filename string) (*colony, error) {
 	// suppose checkinah
 	// var error_parsing error
 	colony := NewColony()
 	var (
-		start_found = false
-		end_found   = false
+		start_found      = false
+		end_found        = false
+		start_room_found = false
+		end_room_found   = false
 	)
 
 	file, err := os.Open(filename)
@@ -79,10 +37,17 @@ func Parse(filename string) (*colony, error) {
 				return nil, errors.New("ERROR: invalid number of Ants")
 			}
 		} else {
-			if CheckIsComment(line, scanner.Bytes()) {
+			if CheckIsComment(line, scanner.Bytes()) && start_found && !start_room_found {
+				colony.start = line + 1
+			} else if CheckIsComment(line, scanner.Bytes()) && end_found && !end_room_found {
+				colony.end = line + 1
+			} else if CheckIsComment(line, scanner.Bytes()) {
 				continue
-			}
-			if emptyline.Match(scanner.Bytes()) {
+			} else if emptyline.Match(scanner.Bytes()) && start_found && !start_room_found {
+				colony.start = line + 1
+			} else if emptyline.Match(scanner.Bytes()) && end_found && !end_room_found {
+				colony.end = line + 1
+			} else if emptyline.Match(scanner.Bytes()) {
 				continue
 			} else if start_line.Match(scanner.Bytes()) && !start_found {
 				start_found = true
@@ -94,159 +59,52 @@ func Parse(filename string) (*colony, error) {
 				colony.end = line + 1
 			} else if end_line.Match(scanner.Bytes()) && end_found {
 				return nil, errors.New("ERROR: too many ends at line: " + strconv.Itoa(line))
-			} else if line == colony.start {
+			} else if !emptyline.Match(scanner.Bytes()) && !comment.Match(scanner.Bytes()) && line == colony.start {
+				start_room_found = true
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
 					colony.start_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
+					err := colony.addRoom(colony.start_room)
+					if err != nil {
+						return nil, err
+					}
 				} else {
 					return nil, errors.New("ERROR: No start Found")
 				}
-			} else if line == colony.end {
+			} else if !emptyline.Match(scanner.Bytes()) && !comment.Match(scanner.Bytes()) && line == colony.end {
+				end_room_found = true
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
 					colony.end_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					err := colony.addRoom(colony.start_room, colony.end_room)
+					err := colony.addRoom(colony.end_room)
 					if err != nil {
-						return nil, errors.New(string(scanner.Bytes()))
+						return nil, err
 					}
 				} else {
 					return nil, errors.New("ERROR: No end Found")
 				}
+
+			} else if ok, chunks := CheckIsRoom(line, scanner.Bytes()); ok {
+
+				new_room := NewRoom()
+				new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
+
+				err := colony.addRoom(new_room)
+				if err != nil {
+					return nil, err
+				}
+
 			} else if strings.Contains(string(scanner.Bytes()), "-") {
 				err := HandleTunnels(&colony, scanner.Bytes(), line)
 				if err != nil {
 					return nil, err
 				}
-			} else {
-				ok, chunks := CheckIsRoom(line, scanner.Bytes())
-				if ok {
-					new_room := NewRoom("", -1, -1)
-					new_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					err := colony.addRoom(new_room)
-					if err != nil {
-						return nil, errors.New(string(scanner.Bytes()))
-					}
-				}
 			}
-
 		}
 
 	}
 	return &colony, nil
 }
 
-func CheckAnts(line_content []byte) bool {
-	_, err := strconv.Atoi(string(line_content))
-	return err == nil
-}
-
-// check if the coordinates are also convertable
-// checked so we are sure that they are digits
-
-func CheckIsRoom(line_number int, line []byte) (bool, [][]byte) {
-	if !CheckIsComment(line_number, line) {
-		chunks := bytes.Split(line, []byte(" "))
-		if len(chunks) > 3 {
-			return false, nil
-		}
-		return roomName.Match(chunks[0]) && roomCoordinates.Match(chunks[1]) && roomCoordinates.Match(chunks[2]), chunks
-
-	}
-	return false, nil
-}
-
-func CheckIsComment(line_number int, line []byte) bool {
-	return !start_line.Match(line) && !end_line.Match(line) && comment.Match(line)
-}
-
-func toInt(bytes []byte) int {
-	result := 0
-	for _, bt := range bytes {
-		result = result*10 + int(bt-'0')
-	}
-	return result
-}
-
-func (c colony) String() string {
-	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.ants, c.start, c.end, c.start_room, c.end_room, c.rooms_coor)
-}
-
-// slice is not optimized for this // done
-
 // Check if 2 rooms have the same coordinates block of fcts
 // use a hash function
-
-// fucntion to check if the the tunnel found fih ghir 2
-func CheckTunnels(line int, line_content []byte) ([][]byte, error) {
-	chunks := bytes.Split(line_content, []byte("-"))
-	if len(chunks) != 2 {
-		return nil, errors.New("ERROR: there is more or less than one connection at line: " + strconv.Itoa(line))
-	}
-	return chunks, nil
-}
-
-// function to check if the the pieces found rooms nit wlla walu
-
-func HandleTunnels(col *colony, line_content []byte, line int) error {
-	chunks, err := CheckTunnels(line, line_content)
-	var ok bool
-	if err != nil {
-		return err
-	} else {
-		_, ok1 := col.rooms_coor[string(chunks[0])]
-		_, ok2 := col.rooms_coor[string(chunks[1])]
-
-		ok = ok1 && ok2
-		switch ok {
-		case false:
-			return errors.New("ERROR: the room in this tunnel doesn't exist " + strconv.Itoa(line))
-		case true:
-			err1 := checkConnection(string(chunks[0]), string(chunks[1]), col)
-			err2 := checkConnection(string(chunks[1]), string(chunks[0]), col)
-			if err1 != nil || err2 != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-// func to check if the rooms is already related to each other
-// this is really getting more longer than expected
-func checkConnection(room1_key string, room2_key string, col *colony) error {
-	//
-	if value, ok := col.Tunnels[room1_key]; ok {
-		// l9ina room2 deja kayna
-		if _, ok := value.Links[room2_key]; ok {
-			return errors.New("ERROR: this connection already exists")
-		} else {
-			value.Links[room2_key] = struct{}{}
-		}
-	} else {
-		// This is working but i have no clue on the why behind but hadshi jamil
-		// 7bbiiiit
-		value1 := NewRoom(room1_key, col.rooms_coor[room1_key][0].(int), col.rooms_coor[room1_key][1].(int))
-		var value2 *room
-		// need to check the same for the room2  also
-		// this was the messing part
-		if value2, ok = col.Tunnels[room2_key]; !ok {
-			value2 = NewRoom(room2_key, col.rooms_coor[room2_key][0].(int), col.rooms_coor[room2_key][1].(int))
-		}
-		value1.Links[room2_key] = struct{}{}
-		value2.Links[room1_key] = struct{}{}
-		col.Tunnels[room1_key] = value1
-		col.Tunnels[room2_key] = value2
-
-		// value.setLinks()
-	}
-	// we don't need to check if the room2 already contains room1 link because when adding, we add them both to each other
-	return nil
-}
-
-// this function is here to just show us the links :<)=
-
-func (c *colony) PrintLinks(links map[string]*room) {
-	for key, value := range links {
-		fmt.Printf("the room  %s and the links are %v \n", key, value.Links)
-	}
-}

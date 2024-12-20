@@ -24,11 +24,11 @@ type colony struct {
 }
 
 var (
-	start_line      = regexp.MustCompile("^##start$")
-	end_line        = regexp.MustCompile("^##end$")
+	start_line      = regexp.MustCompile(`^##start\s*$`)
+	end_line        = regexp.MustCompile(`^##end\s*$`)
 	comment         = regexp.MustCompile("^#")
 	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
 	roomCoordinates = regexp.MustCompile("[0-9]+")
-	emptyline       = regexp.MustCompile(`^\\s*$`)
-	// is_tunnel       = regexp.MustCompile(`^([a-zA-Z0-9]+)[-]([a-zA-Z0-9]+)$`)
+	emptyline       = regexp.MustCompile(`^\s*$`)   // matches a empty line or line with spaces 
+	
 )

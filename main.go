@@ -13,12 +13,18 @@ func main() {
 	case 0:
 		fmt.Println("USAGE: go run . file.txt")
 	case 1:
-		colony, err := helpers.Parse(args[0])
-		if err != nil {
-			fmt.Println(err)
+		colony, err_exe := helpers.Parse(args[0])
+		if err_exe != nil {
+			helpers.Error(err_exe)
 			return
 		}
-		fmt.Println(colony.String())
+		err_struct := colony.CheckStruct(&colony)
+		if err_struct != nil {
+			helpers.Error(err_struct)
+			return
+			
+		}
+		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
 
 	default:
