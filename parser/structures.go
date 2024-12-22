@@ -4,8 +4,8 @@ import "regexp"
 
 // what if we could create the type room like this
 
-type room struct {
-	name  string
+type Room struct {
+	Name  string
 	x     int
 	y     int
 	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
@@ -17,14 +17,14 @@ var combinaison = make(map[int]struct{})
 
 
 
-type colony struct {
-	ants       int
-	start      int
-	end        int
-	start_room *room
-	end_room   *room
-	rooms_coor map[string][]interface{}
-	Tunnels    map[string]*room
+type Colony struct {
+	Ants       int
+	Start      int
+	End        int
+	Start_room *Room
+	End_room   *Room
+	Rooms_coor map[string][]interface{}
+	Tunnels    map[string]*Room
 
 	// tunnels    map[string][]string
 }

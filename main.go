@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"lemin/parser"
+	a "lemin/algorithm"
 )
 
 func main() {
@@ -26,6 +27,8 @@ func main() {
 		}
 		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
+		fmt.Println(a.FindPathsDFS(colony, colony.Start_room.Name, colony.End_room.Name))
+
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")

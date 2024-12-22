@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Parse(filename string) (*colony, error) {
+func Parse(filename string) (*Colony, error) {
 	// suppose checkinah
 	// var error_parsing error
 	colony := NewColony()
@@ -31,52 +31,52 @@ func Parse(filename string) (*colony, error) {
 
 		if line == 1 {
 			if CheckAnts(scanner.Bytes()) {
-				colony.ants, _ = strconv.Atoi(string(scanner.Bytes()))
+				colony.Ants, _ = strconv.Atoi(string(scanner.Bytes()))
 				continue
 			} else {
 				return nil, errors.New("ERROR: invalid number of Ants")
 			}
 		} else {
 			if CheckIsComment(line, scanner.Bytes()) && start_found && !start_room_found {
-				colony.start = line + 1
+				colony.Start = line + 1
 			} else if CheckIsComment(line, scanner.Bytes()) && end_found && !end_room_found {
-				colony.end = line + 1
+				colony.End = line + 1
 			} else if CheckIsComment(line, scanner.Bytes()) {
 				continue
 			} else if emptyline.Match(scanner.Bytes()) && start_found && !start_room_found {
-				colony.start = line + 1
+				colony.Start = line + 1
 			} else if emptyline.Match(scanner.Bytes()) && end_found && !end_room_found {
-				colony.end = line + 1
+				colony.End = line + 1
 			} else if emptyline.Match(scanner.Bytes()) {
 				continue
 			} else if start_line.Match(scanner.Bytes()) && !start_found {
 				start_found = true
-				colony.start = line + 1
+				colony.Start = line + 1
 			} else if start_line.Match(scanner.Bytes()) && start_found {
 				return nil, errors.New("ERROR: too many starts at line: " + strconv.Itoa(line))
 			} else if end_line.Match(scanner.Bytes()) && !end_found {
 				end_found = true
-				colony.end = line + 1
+				colony.End = line + 1
 			} else if end_line.Match(scanner.Bytes()) && end_found {
 				return nil, errors.New("ERROR: too many ends at line: " + strconv.Itoa(line))
-			} else if !emptyline.Match(scanner.Bytes()) && !comment.Match(scanner.Bytes()) && line == colony.start {
+			} else if !emptyline.Match(scanner.Bytes()) && !comment.Match(scanner.Bytes()) && line == colony.Start {
 				start_room_found = true
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
-					colony.start_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					err := colony.addRoom(colony.start_room)
+					colony.Start_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
+					err := colony.addRoom(colony.Start_room)
 					if err != nil {
 						return nil, err
 					}
 				} else {
 					return nil, errors.New("ERROR: No start Found")
 				}
-			} else if !emptyline.Match(scanner.Bytes()) && !comment.Match(scanner.Bytes()) && line == colony.end {
+			} else if !emptyline.Match(scanner.Bytes()) && !comment.Match(scanner.Bytes()) && line == colony.End {
 				end_room_found = true
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
-					colony.end_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
-					err := colony.addRoom(colony.end_room)
+					colony.End_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
+					err := colony.addRoom(colony.End_room)
 					if err != nil {
 						return nil, err
 					}

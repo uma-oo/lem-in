@@ -10,16 +10,16 @@ import (
 // So after reading the file and be not able to reach an error catcheable while reading
 // Empty the struct again
 
-func (c *colony) CheckStruct(cPt **colony) error {
-	if c.start_room.name == "" {
+func (c *Colony) CheckStruct(cPt **Colony) error {
+	if c.Start_room.Name == "" {
 		*cPt = nil
 		// this is working but why ???
 		return errors.New("ERROR: The Start Command is Never Found")
 
-	} else if c.end_room.name == "" {
+	} else if c.End_room.Name == "" {
 		*cPt = nil
 		return errors.New("ERROR: The End Command is Never Found")
-	} else if len(c.rooms_coor) == 0 {
+	} else if len(c.Rooms_coor) == 0 {
 		*cPt = nil
 		return errors.New("ERROR: No rooms Found")
 	} else if len(c.Tunnels) == 0 {
@@ -30,6 +30,6 @@ func (c *colony) CheckStruct(cPt **colony) error {
 }
 
 // Just to debug the colony
-func (c *colony) String() string {
-	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.ants, c.start, c.end, c.start_room, c.end_room, c.rooms_coor)
+func (c *Colony) String() string {
+	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.Ants, c.Start, c.End, c.Start_room, c.End_room, c.Rooms_coor)
 }
