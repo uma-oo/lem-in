@@ -1,4 +1,4 @@
-package helpers
+package parser
 
 import (
 	"errors"
@@ -19,6 +19,12 @@ func (c *colony) CheckStruct(cPt **colony) error {
 	} else if c.end_room.name == "" {
 		*cPt = nil
 		return errors.New("ERROR: The End Command is Never Found")
+	} else if len(c.rooms_coor) == 0 {
+		*cPt = nil
+		return errors.New("ERROR: No rooms Found")
+	} else if len(c.Tunnels) == 0 {
+		*cPt = nil
+		return errors.New("ERROR: No Tunnels Found")
 	}
 	return nil
 }

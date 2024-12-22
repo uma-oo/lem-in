@@ -1,4 +1,4 @@
-package helpers
+package parser
 
 func NewColony() colony {
 	return colony{

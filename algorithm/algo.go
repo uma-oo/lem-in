@@ -1,6 +1,4 @@
-package helpers
-
-
+package algorithm
 
 
 func FindPaths(){

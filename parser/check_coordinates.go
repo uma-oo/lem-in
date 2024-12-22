@@ -1,4 +1,4 @@
-package helpers
+package parser
 
 // handles only positove coordinates
 

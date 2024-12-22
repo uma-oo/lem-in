@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"lemin/helpers"
+	"lemin/parser"
 )
 
 func main() {
@@ -13,14 +13,14 @@ func main() {
 	case 0:
 		fmt.Println("USAGE: go run . file.txt")
 	case 1:
-		colony, err_exe := helpers.Parse(args[0])
+		colony, err_exe := parser.Parse(args[0])
 		if err_exe != nil {
-			helpers.Error(err_exe)
+			parser.Error(err_exe)
 			return
 		}
 		err_struct := colony.CheckStruct(&colony)
 		if err_struct != nil {
-			helpers.Error(err_struct)
+			parser.Error(err_struct)
 			return
 			
 		}
