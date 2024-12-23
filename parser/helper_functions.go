@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+
+	
 )
 
 func Error(mssg any) {
@@ -58,3 +60,8 @@ func toInt(bytes []byte) int {
 	}
 	return result * sign
 }
+
+func (c *Colony) Degree(room string) int {
+	return len(c.Tunnels[room].Links) - 1
+}
+
