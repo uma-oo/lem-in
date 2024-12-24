@@ -22,13 +22,12 @@ func main() {
 		if err_struct != nil {
 			p.Error(err_struct)
 			return
-			
+
 		}
 		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
-		fmt.Println(p.BFSPaths(colony))
-		fmt.Println(p.BFSPathsForAnts(colony))
-
+		// p.BFS(colony)
+		p.BFSOnSingleNode(colony , "0")
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")

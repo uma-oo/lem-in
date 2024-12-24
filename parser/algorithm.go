@@ -2,131 +2,72 @@ package parser
 
 import "fmt"
 
-// Let's implemnt the BFS without costs
-// Just to test things out
+// func BFS(graph *Colony) {
+// 	var Paths [][]string
+// 	visited := make(map[string]struct{})
+// 	start_points := graph.Tunnels[graph.Start_room.Name].Links
+// 	visited[graph.Start_room.Name] = struct{}{}
+// 	for key := range start_points {
+// 		slice := []string{}
+// 		current := key
+// 		slice = append(slice, current)
+// 		queue := []string{}
+// 		for link := range graph.Tunnels[current].Links {
+// 			queue = append(queue, link)
+// 			if _, ok := visited[link]; !ok && key != graph.End_room.Name {
+// 				slice = append(slice, link)
+// 				visited[link] = struct{}{}
+// 			}
+// 		}
+// 		fmt.Println("slice", slice)
+// 		Paths = append(Paths, slice)
+// 	}
+// 	fmt.Println(start_points)
+// 	fmt.Println(Paths)
+// }
 
+func BFSOnSingleNode(graph *Colony, node string) {
+	var paths [][]string
+	queue := []struct {
+		node string
+		path []string
+	}{{
+		node: node,
+		path: []string{node},
+	}}
+	visited := make(map[string]struct{})
+	visited[node] = struct{}{} // Mark the starting node as visited
 
-
-var queue []string 
-
-func BFSPaths(graph *Colony) []string {
-	var current string
-	var queue []string
-	var result []string
-	visited := make(map[string]string)
-	queue = append(queue, ReturnKeys(graph.Tunnels[graph.Start_room.Name].Links)...)
 	for len(queue) > 0 {
-		current = Pop(queue)
-		result = append(result, current)
-		visited[current] = graph.Start_room.Name
+		// Dequeue the front node
+		current := queue[0]
 		queue = queue[1:]
-		for _, element := range ReturnKeys(graph.Tunnels[current].Links) {
-			// if !visited[element] && element != graph.End_room.Name {
-			// 	visited[element] = true
-			// 	queue = append(queue, element)
-			// }
 
-			if _, ok := visited[element]; !ok {
-				visited[element] = current
+		// Process the current node
+		for link := range graph.Tunnels[current.node].Links {
+			if _, ok := visited[link]; !ok {
+				// Mark the link as visited
+				visited[link] = struct{}{}
+
+				// Create a new path that includes the current node and the link
+				newPath := append([]string{}, current.path...) 
+				newPath = append(newPath, link)           
+
+				// Check if the link is the end node
+				if link == graph.End_room.Name {
+					// If it's the end node, add the path to the paths slice
+					paths = append(paths, newPath)
+				} else {
+					// Otherwise, enqueue the new node and the updated path
+					queue = append(queue, struct {
+						node string
+						path []string
+					}{node: link, path: newPath})
+				}
 			}
 		}
 	}
-	return result
+
+	fmt.Println("Visited nodes:", visited)
+	fmt.Println("Paths found:", paths)
 }
-
-func ReturnKeys(m map[string]struct{}) []string {
-	var keys []string
-	for key := range m {
-		keys = append(keys, key)
-	}
-	return keys
-}
-
-func Pop(queue []string) string {
-	return string(queue[0])
-}
-
-func BFSPathsForAnts(graph *Colony) []int{
-	var current string
-	var queue []string
-	result := graph.Initialize(graph.Start_room.Name)
-	visited := make(map[string]struct{})
-	visited[graph.Start_room.Name] = struct{}{}
-	proposed_explorations := []int{}
-	frontier_map:=make(map[int][]string)
-	for _, path := range result {
-		
-		frontier := path[len(path)-1]
-		frontier_map[len(graph.Tunnels[frontier].Links)]=append(frontier_map[len(graph.Tunnels[frontier].Links)], frontier)
-		proposed_explorations = append(proposed_explorations, len(graph.Tunnels[frontier].Links))
-		
-        
-	}
-	sorted_proposed_explorations:=quickSortStart(proposed_explorations)
-	for _, element:= range sorted_proposed_explorations{
-		queue = append(queue, frontier_map[element]...)
-		current = Pop(queue)
-		if _, ok := visited[current]; !ok {
-            
-		}
-	}
-	fmt.Println(queue)
-    fmt.Println(frontier_map)
-	return sorted_proposed_explorations
-}
-
-func (c *Colony) Initialize(key string) [][]string {
-	var paths [][]string
-	keys := ReturnKeys(c.Tunnels[key].Links)
-	for i := 0; i < len(keys); i++ {
-		paths = append(paths, []string{keys[i]})
-	}
-	return paths
-}
-
-
-
-
-
-
-
-
-
-
-// func Explore(graph *Colony, node string){
-// 	for key := range graph.Tunnels[node].Links{
-       
-// 	}
-
-// }
-
-
-
-
-
-// here where will be choosing the correct node to be explored
-
-	
-
-
-
-// queue = append(queue, ReturnKeys(graph.Tunnels[graph.Start_room.Name].Links)...)
-// 	for len(queue) > 0 {
-// 		current = Pop(queue)
-// 		result = append(result, current)
-// 		visited[current] = graph.Start_room.Name
-// 		queue = queue[1:]
-// 		for _, element := range ReturnKeys(graph.Tunnels[current].Links) {
-
-// 			// if !visited[element] && element != graph.End_room.Name {
-// 			// 	visited[element] = true
-// 			// 	queue = append(queue, element)
-// 			// }
-
-// 			if _ , ok := visited[element]; !ok {
-//                 visited[element]=current
-
-// 			}
-// 		}
-// 	}
-// 	return result
