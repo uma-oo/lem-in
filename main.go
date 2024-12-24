@@ -27,7 +27,7 @@ func main() {
 		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
 		// p.BFS(colony)
-		p.BFSOnSingleNode(colony , "0")
+		p.BfsShortestPath(colony , "h")
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")

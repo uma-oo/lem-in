@@ -14,6 +14,7 @@ func (c *Colony) CheckStruct(cPt **Colony) error {
 	if c.Start_room.Name == "" {
 		*cPt = nil
 		// this is working but why ???
+		
 		return errors.New("ERROR: The Start Command is Never Found")
 
 	} else if c.End_room.Name == "" {
