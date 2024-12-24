@@ -34,10 +34,11 @@ func CheckIsRoom(line_number int, line []byte) (bool, [][]byte) {
 }
 
 func CheckCoorIsDuplicate(x int, y int) error {
-	if _, ok := combinaison[szudzikPairSigned(x, y)]; ok {
+	value:=szudzikPairSigned(x, y)
+	if _, ok := combinaison[value]; ok {
 		return errors.New("ERROR: The coordinates of this room already exist")
 	}
-	combinaison[szudzikPairSigned(x, y)] = struct{}{}
+	combinaison[value] = struct{}{}
 
 	return nil
 }

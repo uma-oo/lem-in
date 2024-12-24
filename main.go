@@ -27,7 +27,7 @@ func main() {
 		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
 		fmt.Println(p.BFSPaths(colony))
-		fmt.Println(colony.Initialize())
+		fmt.Println(p.BFSPathsForAnts(colony))
 
 
 	default:

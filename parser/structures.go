@@ -5,17 +5,15 @@ import "regexp"
 // what if we could create the type room like this
 
 type Room struct {
-	Name  string
-	x     int
-	y     int
-	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
+	Name   string
+	x      int
+	y      int
+	Links  map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
+	degree int
+	order  []string
 }
 
-
-
 var combinaison = make(map[int]struct{})
-
-
 
 type Colony struct {
 	Ants       int
@@ -35,6 +33,12 @@ var (
 	comment         = regexp.MustCompile("^#")
 	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
 	roomCoordinates = regexp.MustCompile("-?[0-9]+")
-	emptyline       = regexp.MustCompile(`^\s*$`)   // matches a empty line or line with spaces 
-	
+	emptyline       = regexp.MustCompile(`^\s*$`) // matches a empty line or line with spaces
+
 )
+
+type solver struct {
+	queue []string
+	paths [][]string
+	visited map[string]struct{}
+}
