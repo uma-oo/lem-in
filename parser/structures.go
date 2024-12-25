@@ -11,11 +11,7 @@ type Room struct {
 	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
 }
 
-
-
 var combinaison = make(map[int]struct{})
-
-
 
 type Colony struct {
 	Ants       int
@@ -26,8 +22,6 @@ type Colony struct {
 	Rooms_coor map[string][]interface{}
 	Tunnels    map[string]*Room
 
-	
-
 	// tunnels    map[string][]string
 }
 
@@ -37,6 +31,21 @@ var (
 	comment         = regexp.MustCompile("^#")
 	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
 	roomCoordinates = regexp.MustCompile("-?[0-9]+")
-	emptyline       = regexp.MustCompile(`^\s*$`)   // matches a empty line or line with spaces 
-	
+	emptyline       = regexp.MustCompile(`^\s*$`) // matches a empty line or line with spaces
+
 )
+
+// The Structs used in the process of finding the paths
+
+type Node struct {
+	Name    *Room
+	Visited bool
+	Parent  *Node
+}
+
+type Path struct {
+	Id          int
+	Rooms_found map[string]struct{}
+}
+
+var Paths = []Path{}
