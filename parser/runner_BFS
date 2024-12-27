@@ -1,0 +1,8 @@
+package parser
+
+func RunnerBFS(graph *Colony) [][]string {
+	prioritized:= DegreeNeighbors(graph)
+
+	
+
+}

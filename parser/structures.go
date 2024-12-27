@@ -19,11 +19,30 @@ type Colony struct {
 	End        int
 	Start_room *Room
 	End_room   *Room
-	Rooms_coor map[string][]interface{}
+	Rooms_coor map[string][]int
 	Tunnels    map[string]*Room
 
 	// tunnels    map[string][]string
 }
+
+// The Structs used in the process of finding the paths
+
+type Node struct {
+	Name *Room
+}
+
+type Traversal struct {
+	Visited_Node map[string]string
+	Queue        []*Node
+}
+
+type Path struct {
+	Id          int
+	Rooms_found []string
+	Length      int
+}
+
+var Paths = []Path{}
 
 var (
 	start_line      = regexp.MustCompile(`^##start\s*$`)
@@ -34,18 +53,3 @@ var (
 	emptyline       = regexp.MustCompile(`^\s*$`) // matches a empty line or line with spaces
 
 )
-
-// The Structs used in the process of finding the paths
-
-type Node struct {
-	Name    *Room
-	Visited bool
-	Parent  *Node
-}
-
-type Path struct {
-	Id          int
-	Rooms_found map[string]struct{}
-}
-
-var Paths = []Path{}

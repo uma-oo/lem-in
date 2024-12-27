@@ -26,6 +26,12 @@ func (c *Colony) CheckStruct(cPt **Colony) error {
 	} else if len(c.Tunnels) == 0 {
 		*cPt = nil
 		return errors.New("ERROR: No Tunnels Found")
+	} else if len(c.Tunnels[c.Start_room.Name].Links)==0 {
+		*cPt = nil
+		return errors.New("ERROR: The Start Room is not tied")
+	} else if len(c.Tunnels[c.End_room.Name].Links)==0 {
+		*cPt = nil
+		return errors.New("ERROR: The End Room is not tied")
 	}
 	return nil
 }

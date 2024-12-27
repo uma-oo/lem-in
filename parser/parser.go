@@ -98,7 +98,7 @@ func Parse(filename string) (*Colony, error) {
 				}
 
 			} else if strings.Contains(string(scanner.Bytes()), "-") {
-				err := HandleTunnels(&colony, scanner.Bytes(), line)
+				err := HandleTunnels(colony, scanner.Bytes(), line)
 				if err != nil {
 					return nil, err
 				}
@@ -106,7 +106,7 @@ func Parse(filename string) (*Colony, error) {
 		}
 
 	}
-	return &colony, nil
+	return colony, nil
 }
 
 // Check if 2 rooms have the same coordinates block of fcts

@@ -66,17 +66,17 @@ func CheckConnections2(room1_key string, room2_key string, col *Colony) error {
 		// hna bzuuj ma3mrhum tcreaw f links // awll mrra ybanu
 		value1 = NewRoom()
 		value2 = NewRoom()
-		value1.setRoom(room1_key, col.Rooms_coor[room1_key][0].(int), col.Rooms_coor[room1_key][1].(int))
-		value2.setRoom(room2_key, col.Rooms_coor[room2_key][0].(int), col.Rooms_coor[room2_key][1].(int))
+		value1.setRoom(room1_key, col.Rooms_coor[room1_key][0], col.Rooms_coor[room1_key][1])
+		value2.setRoom(room2_key, col.Rooms_coor[room2_key][0], col.Rooms_coor[room2_key][1])
 
 	} else if !ok2 && ok1 {
 		// room2 makaynash ga3 f tunnels
 		value2 = NewRoom()
-		value2.setRoom(room2_key, col.Rooms_coor[room2_key][0].(int), col.Rooms_coor[room2_key][1].(int))
+		value2.setRoom(room2_key, col.Rooms_coor[room2_key][0], col.Rooms_coor[room2_key][1])
 	} else {
 		// room1 bu7dha li makaynash
 		value1 = NewRoom()
-		value1.setRoom(room1_key, col.Rooms_coor[room1_key][0].(int), col.Rooms_coor[room1_key][1].(int))
+		value1.setRoom(room1_key, col.Rooms_coor[room1_key][0], col.Rooms_coor[room1_key][1])
 	}
 	value1.Links[room2_key] = struct{}{}
 	value2.Links[room1_key] = struct{}{}
