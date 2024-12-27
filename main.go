@@ -31,6 +31,8 @@ func main() {
 		// p.BfsShortestPath(colony , "h", "end")
 		// fmt.Println(len(colony.Tunnels))
 		fmt.Println(p.DegreeNeighbors(colony))
+		fmt.Println(p.Priority(colony))
+		fmt.Println(p.RunnerBFS(colony))
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")
