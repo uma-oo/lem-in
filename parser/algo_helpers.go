@@ -69,10 +69,18 @@ func Priority(graph *Colony) []string {
 func RunnerBFS(graph *Colony) [][]string {
 	prioritized := Priority(graph)
 	paths := [][]string{}
+	visited := make(map[string]string)
 	for _, element := range prioritized {
-		path := BaseBFS(graph, element, graph.End_room.Name)
+		path, visited_part := BaseBFS(graph, element, graph.End_room.Name)
+		AddMapToAnotherMap(visited, visited_part)
 		paths = append(paths, path)
 	}
 
 	return paths
+}
+
+func AddMapToAnotherMap(whole map[string]string, part map[string]string) {
+	for key, value := range part {
+		whole[key] = value
+	}
 }

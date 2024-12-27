@@ -1,6 +1,6 @@
 package parser
 
-func BaseBFS(graph *Colony, start_node string, end_node string) []string {
+func BaseBFS(graph *Colony, start_node string, end_node string) ([]string, map[string]string) {
 	var current string
 	trajectory := []string{}                                 // The Path will be found
 	var traversal *Traversal = NewTraversal()                // Initilaize dakshi lkula traversal
@@ -25,7 +25,7 @@ func BaseBFS(graph *Colony, start_node string, end_node string) []string {
 			}
 		}
 	}
-	return append([]string{start_node}, trajectory...)
+	return append([]string{start_node}, trajectory...), traversal.Visited_Node
 }
 
 func ReconstructPath(graph *Colony, start_node string, end_node string) {
@@ -36,5 +36,3 @@ func (T *Traversal) Pop() string {
 	T.Queue = T.Queue[1:]
 	return popped.Name.Name
 }
-
-
