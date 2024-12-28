@@ -34,6 +34,6 @@ func NewPath() *Path {
 	}
 }
 
-func NewWholeTraversal() Whole_traversal{
-	return Whole_traversal{}
-}
+// func NewWholeTraversal() Whole_traversal{
+// 	return Whole_traversal{}
+// }

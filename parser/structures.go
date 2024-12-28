@@ -43,7 +43,7 @@ type Path struct {
 }
 
 
-type Whole_traversal map[string]struct{}
+var Whole_traversal map[string]interface{}
 
 var Paths = []Path{}
 

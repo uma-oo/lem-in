@@ -71,7 +71,7 @@ func Priority(graph *Colony) []string {
 }
 
 func AddMapToAnotherMap(whole map[string]interface{}, part map[string]string) {
-	for key, value := range part {
-		whole[key] = value
+	for key, _ := range part {
+		whole[key] = struct{}{}
 	}
 }

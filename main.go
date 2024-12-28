@@ -26,7 +26,7 @@ func main() {
 		}
 		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
-		shortest_path,_ := p.BaseBFS(colony, "4020", "19180")
+		shortest_path,_ := p.BaseBFS(colony, "start", "end")
 		fmt.Println("The Shortest Path Found: ", shortest_path)
 		// p.BFS(colony)
 		// p.BfsShortestPath(colony , "h", "end")
@@ -34,6 +34,8 @@ func main() {
 		fmt.Println(p.DegreeNeighbors(colony))
 		fmt.Println(p.Priority(colony))
 		fmt.Println(p.RunnerBFS(colony))
+		fmt.Println(p.BFSOptimized(GRA
+			))
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")
