@@ -26,7 +26,8 @@ func main() {
 		}
 		fmt.Println(colony)
 		colony.PrintLinks(colony.Tunnels)
-		fmt.Println(p.BaseBFS(colony, "h", "end"))
+		shortest_path,_ := p.BaseBFS(colony, "4020", "19180")
+		fmt.Println("The Shortest Path Found: ", shortest_path)
 		// p.BFS(colony)
 		// p.BfsShortestPath(colony , "h", "end")
 		// fmt.Println(len(colony.Tunnels))

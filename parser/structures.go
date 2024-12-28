@@ -42,6 +42,9 @@ type Path struct {
 	Length      int
 }
 
+
+type Whole_traversal map[string]struct{}
+
 var Paths = []Path{}
 
 var (

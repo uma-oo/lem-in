@@ -11,7 +11,7 @@ func BaseBFS(graph *Colony, start_node string, end_node string) ([]string, map[s
 	for len(traversal.Queue) > 0 {
 		current = traversal.Pop()
 		if current == end_node {
-			for traversal.Visited_Node[current] != "" {
+			for traversal.Visited_Node[current] != "" { // base case ma7ddu mal9ash hadi donc mazal ma9ad l path
 				trajectory = append([]string{current}, trajectory...)
 				current = traversal.Visited_Node[current]
 			}
@@ -28,11 +28,37 @@ func BaseBFS(graph *Colony, start_node string, end_node string) ([]string, map[s
 	return append([]string{start_node}, trajectory...), traversal.Visited_Node
 }
 
-func ReconstructPath(graph *Colony, start_node string, end_node string) {
-}
-
 func (T *Traversal) Pop() string {
 	popped := T.Queue[0]
 	T.Queue = T.Queue[1:]
 	return popped.Name.Name
+}
+
+func BFSOptimized(graph *Colony, start_node string, end_node string) [][]string {
+	whole_traversal := NewWholeTraversal()
+	prioritized := Priority(graph)
+	paths := [][]string{}
+	whole_traversal[start_node] = struct{}{}
+
+	for _, element := range prioritized {
+		path, map_part := BaseBFS(graph, element, graph.End_room.Name)
+		paths = append(paths, path)
+		AddMapToAnotherMap(whole_traversal, map_part)
+
+	}
+
+	return paths
+}
+
+func RunnerBFS(graph *Colony) [][]string {
+	prioritized := Priority(graph)
+	paths := [][]string{}
+	visited := make(map[string]string)
+	for _, element := range prioritized {
+		path, visited_part := BaseBFS(graph, element, graph.End_room.Name)
+		AddMapToAnotherMap(visited.(map[string]interface{}), visited_part)
+		paths = append(paths, path)
+	}
+
+	return paths
 }
