@@ -21,7 +21,7 @@ type Colony struct {
 	End_room   *Room
 	Rooms_coor map[string][]int
 	Tunnels    map[string]*Room
-
+    Bad_Rooms   []string
 	// tunnels    map[string][]string
 }
 
@@ -43,7 +43,8 @@ type Path struct {
 }
 
 
-var Whole_traversal map[string]interface{}
+var Whole_traversal = make(map[string]interface{}) 
+
 
 var Paths = []Path{}
 

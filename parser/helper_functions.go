@@ -66,3 +66,11 @@ func (c *Colony) Degree(room string) int {
 	return len(c.Tunnels[room].Links) - 1
 }
 
+func Contains(path []string , room string)  bool {
+	for _, r := range path {
+		if r==room{
+			return true 
+		}
+	}
+	return false 
+}
