@@ -22,6 +22,7 @@ type Colony struct {
 	Rooms_coor map[string][]int
 	Tunnels    map[string]*Room
     Bad_Rooms   []string
+	Shortest_Path []string 
 	// tunnels    map[string][]string
 }
 

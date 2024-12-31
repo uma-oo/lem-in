@@ -25,23 +25,28 @@ func main() {
 
 		}
 		p.DetectBadRooms(colony)
-		fmt.Println(colony.Bad_Rooms)// Detected here before the Start of the BFS 
-		shortest_path := p.BaseBFS(colony, "t", colony.End_room.Name)
-		fmt.Println("length: ",len(shortest_path)-1,"The Shortest Path Found: ", shortest_path)
+		fmt.Println(colony.Bad_Rooms)                                                              // Detected here before the Start of the BFS
+		colony.Shortest_Path = p.BaseBFS(colony, colony.Start_room.Name, colony.End_room.Name)[1:] // Put the ShortestPath into the colony
+		fmt.Println("length: ", len(colony.Shortest_Path), "The Shortest Path Found: ", colony.Shortest_Path)
 		// p.BFS(colony)
 		// p.BfsShortestPath(colony , "h", "end")
-		// fmt.Println(len(colony.Tunnels))
+
 		// fmt.Println(p.DegreeNeighbors(colony))
 		// fmt.Println(p.Priority(colony))
 		// fmt.Println(p.RunnerBFS(colony))
-		paths := p.BFSOptimized(colony, colony.Start_room.Name, colony.End_room.Name)
+		paths := p.BFSOptimizedDisjoint(colony, colony.Start_room.Name, colony.End_room.Name)
 		fmt.Println("=====================>", len(paths))
 		for _, path := range paths {
-			fmt.Println("Length: ",len(path),"path: ", path)
+			fmt.Println("Length: ", len(path), "path: ", path)
 		}
 
-
 		fmt.Println(p.AverageRoomLinks(colony))
+		p.DecideWhichPath(colony)
+		fmt.Println(p.PriorityWithBadRoom(colony))
+		combianaison:=p.BFSCombinaisons(colony, colony.Start_room.Name, colony.End_room.Name)
+		for _,ele:= range combianaison {
+			fmt.Println(ele)
+		}
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")

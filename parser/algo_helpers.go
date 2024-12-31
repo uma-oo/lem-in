@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -57,7 +58,9 @@ func DegreeNeighborsTwo(map_priority map[string]struct{}, graph *Colony) (string
 // wttf is this
 // ana ktbt hadshi yes but how ????
 // OMG sh7aal 7bbit
-
+// Modify this to include the Bad Room too
+// if a path found contains the bad ROOM
+// we run the BFS on the OTHER One
 func Priority(graph *Colony) []string {
 	arr_priority := []string{}
 	var (
@@ -122,4 +125,20 @@ func AverageRoomLinks(graph *Colony) float64 {
 		average += len(properties.Links)
 	}
 	return math.Round(float64(average / (len(graph.Tunnels)))) // -2 here is to exclude the start and the end
+}
+
+func PriorityWithBadRoom(graph *Colony) []string {
+	var Path []string
+	new_arr_priority := []string{}
+	for _, element := range Priority(graph) {
+		fmt.Println("element", element)
+		Path = BFS(graph, element, graph.End_room.Name)
+		fmt.Println("Path Found", Path, "element", element)
+		if Contains(Path, graph.Bad_Rooms[0]) {
+			continue
+		} else {
+			new_arr_priority = append(new_arr_priority, element)
+		}
+	}
+	return new_arr_priority
 }
