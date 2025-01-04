@@ -14,15 +14,15 @@ type Room struct {
 var combinaison = make(map[int]struct{})
 
 type Colony struct {
-	Ants       int
-	Start      int
-	End        int
-	Start_room *Room
-	End_room   *Room
-	Rooms_coor map[string][]int
-	Tunnels    map[string]*Room
-    Bad_Rooms   []string
-	Shortest_Path []string 
+	Ants          int
+	Start         int
+	End           int
+	Start_room    *Room
+	End_room      *Room
+	Rooms_coor    map[string][]int
+	Tunnels       map[string]*Room
+	Bad_Rooms     []string
+	Shortest_Path []string
 	// tunnels    map[string][]string
 }
 
@@ -37,17 +37,17 @@ type Traversal struct {
 	Queue        []*Node
 }
 
+type Group struct {
+	Visited_Nodes map[string]struct{}
+	Paths         []*Path
+}
+
 type Path struct {
-	Id          int
 	Rooms_found []string
 	Length      int
 }
 
 
-var Whole_traversal = make(map[string]interface{}) 
-
-
-var Paths = []Path{}
 
 var (
 	start_line      = regexp.MustCompile(`^##start\s*$`)

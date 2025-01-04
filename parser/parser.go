@@ -22,7 +22,7 @@ func Parse(filename string) (*Colony, error) {
 	file, err := os.Open(filename)
 	scanner := bufio.NewScanner(file)
 	if err != nil {
-		panic(err)
+		return nil, errors.New("ERROR: Problem in the file")
 	}
 	defer file.Close()
 	line := 0

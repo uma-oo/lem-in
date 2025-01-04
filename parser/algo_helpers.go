@@ -80,7 +80,7 @@ func Priority(graph *Colony) []string {
 	return arr_priority
 }
 
-func AddMapToAnotherMap(whole map[string]interface{}, part []string) {
+func AddMapToAnotherMap(whole map[string]struct{}, part []string) {
 	for _, element := range part {
 		whole[element] = struct{}{}
 	}
@@ -141,4 +141,16 @@ func PriorityWithBadRoom(graph *Colony) []string {
 		}
 	}
 	return new_arr_priority
+}
+
+func (P *Path) String() []string {
+	return P.Rooms_found
+}
+
+func (G *Group) String() [][]string {
+	paths := [][]string{}
+	for _, path := range G.Paths {
+		paths = append(paths, path.Rooms_found)
+	}
+	return paths
 }

@@ -18,9 +18,6 @@ func NewRoom() *Room {
 	}
 }
 
-
-
-
 func NewTraversal() *Traversal {
 	return &Traversal{
 		Visited_Node: make(map[string]string),
@@ -34,6 +31,8 @@ func NewPath() *Path {
 	}
 }
 
-// func NewWholeTraversal() Whole_traversal{
-// 	return Whole_traversal{}
-// }
+func NewGroup() *Group {
+	return &Group{
+		Visited_Nodes: map[string]struct{}{},
+	}
+}
