@@ -40,7 +40,6 @@ G3-G4
 G4-D3
 start-A0
 A0-A1
-A0-D1
 A1-A2
 A1-B1
 A2-end

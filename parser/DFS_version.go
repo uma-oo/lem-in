@@ -86,7 +86,7 @@ func FindAllGroups(graph *Colony) []*Group {
 	groups := []*Group{}
 	for _, node := range Priority(graph) {
 		shortest_paths := DFS(graph, node)
-		
+		// hadi hna because not everytime ghanl9aw shortest b DFS khassna nrunniw BFS 
 		if len(shortest_paths)==0{
 			shortest_paths = append(shortest_paths, BFS(graph, node))
 		}
@@ -105,6 +105,7 @@ func FindAllGroups(graph *Colony) []*Group {
 				if key != node {
 					path = NewPath()
 					path.Rooms_found = group.BaseBFS(graph, key, graph.End_room.Name)
+					fmt.Printf("path.Rooms_found: %v\n", path.Rooms_found)
 					path.Length = len(path.Rooms_found)
 					if path.Length != 0 {
 						AddMapToAnotherMap(group.Visited_Nodes, path.Rooms_found[:len(path.Rooms_found)-1])
