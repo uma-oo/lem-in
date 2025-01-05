@@ -49,24 +49,21 @@ func DFS(graph *Colony, start string) [][]string {
 	visited := make(map[string]bool)
 	visited[graph.Start_room.Name]=true
 	levels := Levels(graph, start, graph.End_room.Name)
-	fmt.Printf("levels: %v\n", levels)
 	var dfsHelper func(current string, path []string)
 	dfsHelper = func(current string, path []string) {
 		if current == start {
 			// Make a copy of the path and add it to trajectories
 			// without this hadshi makaykhdmsh 
 			// ;) 
-			fmt.Printf("\"here\": %v\n", "here")
+
 			pathCopy := make([]string, len(path))
 			copy(pathCopy, path)
 			trajectories = append(trajectories, pathCopy)
 			return
 		}
-        fmt.Printf("\"There\": %v\n", "There")
-		fmt.Printf("current: %v\n", current)
+       
 		visited[current] = true
 		for neighbor := range graph.Tunnels[current].Links {
-			fmt.Printf("neighbor: %v\n", neighbor)
 			if !visited[neighbor] && levels[neighbor] < levels[current] {
 				dfsHelper(neighbor, append([]string{neighbor}, path...))
 			}
@@ -89,9 +86,11 @@ func FindAllGroups(graph *Colony) []*Group {
 	groups := []*Group{}
 	for _, node := range Priority(graph) {
 		shortest_paths := DFS(graph, node)
+		
 		if len(shortest_paths)==0{
 			shortest_paths = append(shortest_paths, BFS(graph, node))
 		}
+		fmt.Printf("shortest_paths: %v for node: %v\n", shortest_paths, node)
 		for _, short := range shortest_paths {
 			group := NewGroup()
 			group.Visited_Nodes[graph.Start_room.Name]=struct{}{}

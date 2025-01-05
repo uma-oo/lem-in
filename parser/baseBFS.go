@@ -1,9 +1,5 @@
 package parser
 
-import (
-	"fmt"
-)
-
 func (G *Group) BaseBFS(graph *Colony, start_node string, end_node string) []string {
 	var current string
 	trajectory := []string{}                  // The Path will be found
@@ -51,8 +47,6 @@ func (T *Traversal) Pop() string {
 	return popped.Name.Name
 }
 
-
-
 func (T *Traversal2) Pop() string {
 	popped := T.Queue[0]
 	T.Queue = T.Queue[1:]
@@ -62,7 +56,6 @@ func (T *Traversal2) Pop() string {
 func RunnerBFS(graph *Colony) []*Group {
 	groups := []*Group{}
 	for _, element := range Priority(graph) {
-		fmt.Println("element", element)
 		group := NewGroup()
 		path := NewPath()
 		path.Rooms_found = group.BaseBFS(graph, element, graph.End_room.Name)
@@ -92,30 +85,29 @@ func RunnerBFS(graph *Colony) []*Group {
 // Doesn't belong to the Group BY ANY WAY
 func BFS(graph *Colony, start_node string) []string {
 	var current string
-	trajectory := []string{}                                 // The Path will be found
-	var traversal *Traversal2 = NewTraversal2()                // Initilaize dakshi lkula traversal
-    traversal.isVisited[graph.Start_room.Name]=true
-	traversal.Parent[start_node] = ""                  // element lwl visited
+	trajectory := []string{}                    // The Path will be found
+	var traversal *Traversal2 = NewTraversal2() // Initilaize dakshi lkula traversal
+	traversal.isVisited[graph.Start_room.Name] = true
+	traversal.Parent[start_node] = ""                        // element lwl visited
 	start_element := SetNode(start_node)                     // kaykunu 3ndna string khasshum yt7wlu t structs li 3ndna
 	traversal.Queue = append(traversal.Queue, start_element) // appendiw element lwlani l queue
-      fmt.Printf("traversal.Queue: %v\n", traversal.Queue)
 	for len(traversal.Queue) > 0 {
-		fmt.Printf("\"here\": %v\n", "here")
 		current = traversal.Pop()
-		if current == graph.End_room.Name{
+		if current == graph.End_room.Name {
 			for traversal.Parent[current] != "" { // base case ma7ddu mal9ash hadi donc mazal ma9ad l path
 				trajectory = append([]string{current}, trajectory...)
 				current = traversal.Parent[current]
 			}
 		}
-        fmt.Printf("current: %v\n", current)
+
 		for element := range graph.Tunnels[current].Links {
-			fmt.Printf("\"there\": %v\n", "there")
-			if _, ok := traversal.isVisited[element]; !ok {
-				traversal.isVisited[element]=true
-				traversal.Parent[element] = current
-				node_element := SetNode(element)
-				traversal.Queue = append(traversal.Queue, node_element)
+			if _, ok := traversal.Parent[element]; !ok {
+				if !traversal.isVisited[element] {
+					traversal.isVisited[element] = true
+					traversal.Parent[element] = current
+					node_element := SetNode(element)
+					traversal.Queue = append(traversal.Queue, node_element)
+				}
 			}
 		}
 
@@ -129,4 +121,3 @@ func BFS(graph *Colony, start_node string) []string {
 }
 
 //  treat the case where we have more than one shortest path related to the start Node
-

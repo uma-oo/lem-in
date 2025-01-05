@@ -34,15 +34,12 @@ func main() {
 		// 	fmt.Println(group.String())
 		// }
 		//  fmt.Printf("p.DFS(colony, \"G0\"): %v\n", p.DFS(colony, "G0"))
-		 fmt.Printf("p.BFS: %v\n", p.BFS(colony, "0"))
-		for key := range colony.Tunnels["G0"].Links {
-			fmt.Printf("key: %v\n", key)
-		}
+		
 
-		// groups2:=p.FindAllGroups(colony)
-		// for _, g := range groups2{
-		// 	fmt.Println(g.String())
-		// }
+		groups2:=p.FindAllGroups(colony)
+		for _, g := range groups2{
+			fmt.Println(g.String())
+		}
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}
