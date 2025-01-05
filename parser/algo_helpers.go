@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -127,21 +126,21 @@ func AverageRoomLinks(graph *Colony) float64 {
 	return math.Round(float64(average / (len(graph.Tunnels)))) // -2 here is to exclude the start and the end
 }
 
-func PriorityWithBadRoom(graph *Colony) []string {
-	var Path []string
-	new_arr_priority := []string{}
-	for _, element := range Priority(graph) {
-		fmt.Println("element", element)
-		Path = BFS(graph, element, graph.End_room.Name)
-		fmt.Println("Path Found", Path, "element", element)
-		if Contains(Path, graph.Bad_Rooms[0]) {
-			continue
-		} else {
-			new_arr_priority = append(new_arr_priority, element)
-		}
-	}
-	return new_arr_priority
-}
+// func PriorityWithBadRoom(graph *Colony) []string {
+// 	var Path []string
+// 	new_arr_priority := []string{}
+// 	for _, element := range Priority(graph) {
+// 		fmt.Println("element", element)
+// 		Path = BFS(graph, element, graph.End_room.Name)
+// 		fmt.Println("Path Found", Path, "element", element)
+// 		if Contains(Path, graph.Bad_Rooms[0]) {
+// 			continue
+// 		} else {
+// 			new_arr_priority = append(new_arr_priority, element)
+// 		}
+// 	}
+// 	return new_arr_priority
+// }
 
 func (P *Path) String() []string {
 	return P.Rooms_found

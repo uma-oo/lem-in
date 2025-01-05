@@ -27,13 +27,22 @@ func main() {
 		}
 		p.DetectBadRooms(colony)
 
-		colony.Shortest_Path = p.BFS(colony, colony.Start_room.Name, colony.End_room.Name)[1:] // Put the ShortestPath into the colony
-		fmt.Println("length: ", len(colony.Shortest_Path), "The Shortest Path Found: ", colony.Shortest_Path)
-		groups := p.RunnerBFS(colony)
-		for _, group := range groups {
-			fmt.Println(group.String())
+		// colony.Shortest_Path = p.BFS(colony, colony.Start_room.Name, colony.End_room.Name)[1:] // Put the ShortestPath into the colony
+		// fmt.Println("length: ", len(colony.Shortest_Path), "The Shortest Path Found: ", colony.Shortest_Path)
+		// groups := p.RunnerBFS(colony)
+		// for _, group := range groups {
+		// 	fmt.Println(group.String())
+		// }
+		//  fmt.Printf("p.DFS(colony, \"G0\"): %v\n", p.DFS(colony, "G0"))
+		 fmt.Printf("p.BFS: %v\n", p.BFS(colony, "0"))
+		for key := range colony.Tunnels["G0"].Links {
+			fmt.Printf("key: %v\n", key)
 		}
 
+		// groups2:=p.FindAllGroups(colony)
+		// for _, g := range groups2{
+		// 	fmt.Println(g.String())
+		// }
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}

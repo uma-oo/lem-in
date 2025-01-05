@@ -33,7 +33,7 @@ type Node struct {
 }
 
 type Traversal struct {
-	Visited_Node map[string]string
+	Visited_Node map[string][]string
 	Queue        []*Node
 }
 
@@ -47,7 +47,11 @@ type Path struct {
 	Length      int
 }
 
-
+type Traversal2 struct {
+	Parent    map[string]string
+	isVisited map[string]bool
+	Queue     []*Node
+}
 
 var (
 	start_line      = regexp.MustCompile(`^##start\s*$`)

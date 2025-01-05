@@ -20,7 +20,15 @@ func NewRoom() *Room {
 
 func NewTraversal() *Traversal {
 	return &Traversal{
-		Visited_Node: make(map[string]string),
+		Visited_Node: make(map[string][]string),
+		Queue:        []*Node{},
+	}
+}
+
+func NewTraversal2() *Traversal2 {
+	return &Traversal2{
+		Parent: make(map[string]string),
+		isVisited: make(map[string]bool),
 		Queue:        []*Node{},
 	}
 }
