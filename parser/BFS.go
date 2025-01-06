@@ -22,6 +22,7 @@ func (G *Group) BaseBFS(graph *Colony, start_node string, end_node string) []str
 		}
 
 		for element := range graph.Tunnels[current].Links {
+		
 
 			_, ok1 := traversal.Visited_Node[element]
 			_, ok2 := G.Visited_Nodes[element]
@@ -53,34 +54,6 @@ func (T *Traversal2) Pop() string {
 	return popped.Name.Name
 }
 
-func RunnerBFS(graph *Colony) []*Group {
-	groups := []*Group{}
-	for _, element := range Priority(graph) {
-		group := NewGroup()
-		path := NewPath()
-		path.Rooms_found = group.BaseBFS(graph, element, graph.End_room.Name)
-		path.Length = len(path.Rooms_found)
-		if path.Length != 0 {
-			AddMapToAnotherMap(group.Visited_Nodes, path.Rooms_found[:len(path.Rooms_found)-1])
-			group.Paths = append(group.Paths, path)
-		}
-		for _, key := range Priority(graph) {
-			if key != element {
-				path = NewPath()
-				path.Rooms_found = group.BaseBFS(graph, key, graph.End_room.Name)
-				path.Length = len(path.Rooms_found)
-				if path.Length != 0 {
-					AddMapToAnotherMap(group.Visited_Nodes, path.Rooms_found[:len(path.Rooms_found)-1])
-					group.Paths = append(group.Paths, path)
-				}
-
-			}
-		}
-
-		groups = append(groups, group)
-	}
-	return groups
-}
 
 // Doesn't belong to the Group BY ANY WAY
 func BFS(graph *Colony, start_node string) []string {
@@ -120,4 +93,4 @@ func BFS(graph *Colony, start_node string) []string {
 	return nil
 }
 
-//  treat the case where we have more than one shortest path related to the start Node
+

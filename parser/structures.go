@@ -14,16 +14,13 @@ type Room struct {
 var combinaison = make(map[int]struct{})
 
 type Colony struct {
-	Ants          int
-	Start         int
-	End           int
-	Start_room    *Room
-	End_room      *Room
-	Rooms_coor    map[string][]int
-	Tunnels       map[string]*Room
-	Bad_Rooms     []string
-	Shortest_Path []string
-	// tunnels    map[string][]string
+	Ants       int
+	Start      int
+	End        int
+	Start_room *Room
+	End_room   *Room
+	Rooms_coor map[string][]int
+	Tunnels    map[string]*Room
 }
 
 // The Structs used in the process of finding the paths
@@ -33,6 +30,7 @@ type Node struct {
 }
 
 type Traversal struct {
+	Is_Visited   map[string]bool
 	Visited_Node map[string][]string
 	Queue        []*Node
 }
@@ -40,6 +38,8 @@ type Traversal struct {
 type Group struct {
 	Visited_Nodes map[string]struct{}
 	Paths         []*Path
+	Shortest_Path *Path
+
 }
 
 type Path struct {

@@ -54,12 +54,7 @@ func DegreeNeighborsTwo(map_priority map[string]struct{}, graph *Colony) (string
 	return min, neigbors
 }
 
-// wttf is this
-// ana ktbt hadshi yes but how ????
-// OMG sh7aal 7bbit
-// Modify this to include the Bad Room too
-// if a path found contains the bad ROOM
-// we run the BFS on the OTHER One
+
 func Priority(graph *Colony) []string {
 	arr_priority := []string{}
 	var (
@@ -85,38 +80,9 @@ func AddMapToAnotherMap(whole map[string]struct{}, part []string) {
 	}
 }
 
-func DiscardPath(whole map[string]interface{}, path []string) {
-	for _, room := range path {
-		delete(whole, room)
-	}
-}
 
 // the bad room is always the first one to accur and second one and so on
 
-func DetectBadRooms(graph *Colony) {
-	initiliazed := false
-	var max int
-	for room, length := range graph.Tunnels {
-		if room == graph.End_room.Name || room == graph.Start_room.Name {
-			continue
-		} else {
-			if len(length.Links) > int(AverageRoomLinks(graph)) && !initiliazed {
-				graph.Bad_Rooms = append(graph.Bad_Rooms, room)
-				max = len(length.Links)
-				initiliazed = true
-
-			} else if len(length.Links) > int(AverageRoomLinks(graph)) && initiliazed {
-				if len(length.Links) > max {
-
-					max = len(length.Links)
-					graph.Bad_Rooms = append([]string{room}, graph.Bad_Rooms...)
-				} else {
-					graph.Bad_Rooms = append(graph.Bad_Rooms, room)
-				}
-			}
-		}
-	}
-}
 
 func AverageRoomLinks(graph *Colony) float64 {
 	var average int
@@ -126,21 +92,6 @@ func AverageRoomLinks(graph *Colony) float64 {
 	return math.Round(float64(average / (len(graph.Tunnels)))) // -2 here is to exclude the start and the end
 }
 
-// func PriorityWithBadRoom(graph *Colony) []string {
-// 	var Path []string
-// 	new_arr_priority := []string{}
-// 	for _, element := range Priority(graph) {
-// 		fmt.Println("element", element)
-// 		Path = BFS(graph, element, graph.End_room.Name)
-// 		fmt.Println("Path Found", Path, "element", element)
-// 		if Contains(Path, graph.Bad_Rooms[0]) {
-// 			continue
-// 		} else {
-// 			new_arr_priority = append(new_arr_priority, element)
-// 		}
-// 	}
-// 	return new_arr_priority
-// }
 
 func (P *Path) String() []string {
 	return P.Rooms_found

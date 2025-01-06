@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	p "lemin/parser"
 )
@@ -10,9 +11,6 @@ import (
 func main() {
 	args := os.Args[1:]
 	switch len(args) {
-	case 0:
-		p.Error("USAGE: go run . file.txt")
-		return
 	case 1:
 		colony, err_exe := p.Parse(args[0])
 		if err_exe != nil {
@@ -25,35 +23,25 @@ func main() {
 			return
 
 		}
-		p.DetectBadRooms(colony)
 
-		// colony.Shortest_Path = p.BFS(colony, colony.Start_room.Name, colony.End_room.Name)[1:] // Put the ShortestPath into the colony
-		// fmt.Println("length: ", len(colony.Shortest_Path), "The Shortest Path Found: ", colony.Shortest_Path)
-		// groups := p.RunnerBFS(colony)
-		// for _, group := range groups {
-		// 	fmt.Println(group.String())
-		// }
-		//  fmt.Printf("p.DFS(colony, \"G0\"): %v\n", p.DFS(colony, "G0"))
-		
-
-		groups2:=p.FindAllGroups(colony)
-		for _, g := range groups2{
-			fmt.Println(g.String())
+		groups2 := p.FindAllGroups(colony)
+		for _, g := range groups2 {
+			fmt.Printf("group: %v\n", g.String())
 		}
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}
 }
 
-// func init() {
-// 	args := os.Args[1:]
-// 	switch true {
-// 	case len(args) != 1:
-// 		p.Error("USAGE: go run . file.txt")
-// 		return
-// 	case !strings.HasSuffix(args[0], ".txt"):
-// 		p.Error("USAGE: go run . file.txt")
-// 		return
+func init() {
+	args := os.Args[1:]
+	switch true {
+	case len(args) != 1:
+		p.Error("USAGE: go run . file.txt")
+		os.Exit(0)
+	case !strings.HasSuffix(args[0], ".txt"):
+		p.Error("USAGE: go run . file.txt")
+		os.Exit(0)
 
-// 	}
-// }
+	}
+}

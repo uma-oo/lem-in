@@ -21,6 +21,7 @@ func NewRoom() *Room {
 func NewTraversal() *Traversal {
 	return &Traversal{
 		Visited_Node: make(map[string][]string),
+		Is_Visited: make(map[string]bool),
 		Queue:        []*Node{},
 	}
 }
