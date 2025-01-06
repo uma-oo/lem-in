@@ -139,7 +139,7 @@ func FindAllGroups(graph *Colony) []*Group {
 func (G *Group) AppendPathToGroup(path_to_append *Path) {
 	last := G.Paths[len(G.Paths)-1]
 	if last.Length > path_to_append.Length {
-		G.Paths = append([]*Path{path_to_append, last}, G.Paths[:len(G.Paths)-1]...)
+		G.Paths = append(G.Paths[:len(G.Paths)-1], path_to_append)
 		G.Paths = append(G.Paths, last)
 	} else {
 		G.Paths = append(G.Paths, path_to_append)
