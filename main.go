@@ -28,6 +28,7 @@ func main() {
 		for _, g := range groups2 {
 			fmt.Printf("group: %v\n", g.String())
 		}
+		p.DecideWhichGroup(colony)
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}
