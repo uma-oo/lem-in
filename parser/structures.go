@@ -9,18 +9,21 @@ type Room struct {
 	x     int
 	y     int
 	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
+	IsOccupied bool 
+	step int 
 }
 
 var combinaison = make(map[int]struct{})
 
 type Colony struct {
-	Ants       int
-	Start      int
-	End        int
-	Start_room *Room
-	End_room   *Room
-	Rooms_coor map[string][]int
-	Tunnels    map[string]*Room
+	Ants           int
+	Start          int
+	End            int
+	Start_room     *Room
+	End_room       *Room
+	Rooms_coor     map[string][]int
+	Tunnels        map[string]*Room
+	Shortest_Paths []*Path
 }
 
 // The Structs used in the process of finding the paths
@@ -39,7 +42,7 @@ type Group struct {
 	Visited_Nodes map[string]struct{}
 	Paths         []*Path
 	Shortest_Path *Path
-
+	Turns         int
 }
 
 type Path struct {
@@ -52,6 +55,20 @@ type Traversal2 struct {
 	isVisited map[string]bool
 	Queue     []*Node
 }
+
+// structs used for the printing process 
+
+type Agent struct {
+	Name int
+	RoomOccupied *Room
+	PathUsed *Path
+	HasArrived bool
+
+}
+
+
+
+
 
 var (
 	start_line      = regexp.MustCompile(`^##start\s*$`)

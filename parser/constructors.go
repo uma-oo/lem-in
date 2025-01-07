@@ -2,13 +2,14 @@ package parser
 
 func NewColony() *Colony {
 	return &Colony{
-		Ants:       0,
-		Start:      0,
-		End:        0,
-		Start_room: NewRoom(),
-		End_room:   NewRoom(),
-		Rooms_coor: make(map[string][]int),
-		Tunnels:    make(map[string]*Room),
+		Ants:           0,
+		Start:          0,
+		End:            0,
+		Start_room:     NewRoom(),
+		End_room:       NewRoom(),
+		Rooms_coor:     make(map[string][]int),
+		Tunnels:        make(map[string]*Room),
+		Shortest_Paths: []*Path{},
 	}
 }
 
@@ -21,16 +22,16 @@ func NewRoom() *Room {
 func NewTraversal() *Traversal {
 	return &Traversal{
 		Visited_Node: make(map[string][]string),
-		Is_Visited: make(map[string]bool),
+		Is_Visited:   make(map[string]bool),
 		Queue:        []*Node{},
 	}
 }
 
 func NewTraversal2() *Traversal2 {
 	return &Traversal2{
-		Parent: make(map[string]string),
+		Parent:    make(map[string]string),
 		isVisited: make(map[string]bool),
-		Queue:        []*Node{},
+		Queue:     []*Node{},
 	}
 }
 
@@ -43,5 +44,14 @@ func NewPath() *Path {
 func NewGroup() *Group {
 	return &Group{
 		Visited_Nodes: map[string]struct{}{},
+	}
+}
+
+func NewAgent() *Agent {
+	return &Agent{
+		Name:         0,
+		RoomOccupied: NewRoom(),
+		PathUsed:     NewPath(),
+		HasArrived:   false,
 	}
 }

@@ -24,11 +24,24 @@ func main() {
 
 		}
 
-		groups2 := p.FindAllGroups(colony)
-		for _, g := range groups2 {
-			fmt.Printf("group: %v\n", g.String())
-		}
-		p.DecideWhichGroup(colony)
+		// groups2 := p.FindAllGroups(colony)
+		// for i, g := range groups2 {
+		// 	g.CalculTurns(colony)
+		// 	fmt.Printf("group: %v %v turns: %v\n", i, g.String(), g.Turns)
+		// }
+		fmt.Println()
+
+		best := p.FindTheBestGrp(colony)
+		fmt.Printf("best: %v\n", best.String())
+		best.CalculTurns(colony)
+		fmt.Printf("best.Turns: %v\n", best.Turns)
+		// fmt.Println()
+
+		// best.CalculTurns(colony)
+		// fmt.Printf("best.Turns: %v\n", best.Turns)
+		// fmt.Println()
+		// best.CalculTurns(colony)
+		// fmt.Printf("best.Turns: %v\n", best.Turns)
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}
