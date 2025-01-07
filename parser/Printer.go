@@ -38,10 +38,7 @@ func GetAntPos(turn int, ant int, path []string) string {
 	return ""
 }
 
-func (G *Group) PrintTurns(graph *Colony) {
-	for i := 1; i <= graph.Ants; i++ {
-	}
-}
+
 
 // THIS WILL BE USED IN A REAL TIME CHECKING OF SHOULD THE GROUP BE KEPT OR NO!!
 func Compare2Groups(graph *Colony, group1 *Group, group2 *Group) *Group {
