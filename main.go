@@ -42,10 +42,14 @@ func main() {
 		// fmt.Println()
 		// best.CalculTurns(colony)
 		// fmt.Printf("best.Turns: %v\n", best.Turns)
-		ants:=best.InitializeMvt(colony)
-		for _, ant := range ants {
-			fmt.Println( ant.String())
+		// ants := best.InitializeMvt(colony)
+		lines := best.MoveAnts(colony)
+		for _, line := range lines {
+			fmt.Print(line)
 		}
+		// for _, ant := range ants {
+		// 	fmt.Println(ant.String())
+		// }
 
 	default:
 		fmt.Println("USAGE: go run . file.txt")
