@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-
-	
 )
 
 func Error(mssg any) {
@@ -34,7 +32,7 @@ func CheckIsRoom(line_number int, line []byte) (bool, [][]byte) {
 }
 
 func CheckCoorIsDuplicate(x int, y int) error {
-	value:=szudzikPairSigned(x, y)
+	value := szudzikPairSigned(x, y)
 	if _, ok := combinaison[value]; ok {
 		return errors.New("ERROR: The coordinates of this room already exist")
 	}
@@ -66,11 +64,22 @@ func (c *Colony) Degree(room string) int {
 	return len(c.Tunnels[room].Links) - 1
 }
 
-func Contains(path []string , room string)  bool {
+func Contains(path []string, room string) bool {
 	for _, r := range path {
-		if r==room{
-			return true 
+		if r == room {
+			return true
 		}
 	}
-	return false 
+	return false
 }
+
+// Just to debug the colony
+func (c *Colony) String() string {
+	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.Ants, c.Start, c.End, c.Start_room, c.End_room, c.Rooms_coor)
+}
+
+// To debug the agent again and again
+func (a *Agent) String() string {
+	return fmt.Sprintf("Ant Name: %v, Path used: %v , Start Turn: %v , End Turn: %v", a.Name, a.PathUsed.String(), a.Start_Step, a.End_Step)
+}
+

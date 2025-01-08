@@ -110,4 +110,4 @@ func Parse(filename string) (*Colony, error) {
 }
 
 // Check if 2 rooms have the same coordinates block of fcts
-// use a hash function
+// use a hash function 

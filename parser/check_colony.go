@@ -2,7 +2,6 @@ package parser
 
 import (
 	"errors"
-	"fmt"
 )
 
 // after feeding the struct we need to make sure that we found and start and the end
@@ -14,7 +13,7 @@ func (c *Colony) CheckStruct(cPt **Colony) error {
 	if c.Start_room.Name == "" {
 		*cPt = nil
 		// this is working but why ???
-		
+
 		return errors.New("ERROR: The Start Command is Never Found")
 
 	} else if c.End_room.Name == "" {
@@ -26,17 +25,12 @@ func (c *Colony) CheckStruct(cPt **Colony) error {
 	} else if len(c.Tunnels) == 0 {
 		*cPt = nil
 		return errors.New("ERROR: No Tunnels Found")
-	} else if len(c.Tunnels[c.Start_room.Name].Links)==0 {
+	} else if len(c.Tunnels[c.Start_room.Name].Links) == 0 {
 		*cPt = nil
 		return errors.New("ERROR: The Start Room is not tied")
-	} else if len(c.Tunnels[c.End_room.Name].Links)==0 {
+	} else if len(c.Tunnels[c.End_room.Name].Links) == 0 {
 		*cPt = nil
 		return errors.New("ERROR: The End Room is not tied")
 	}
 	return nil
-}
-
-// Just to debug the colony
-func (c *Colony) String() string {
-	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.Ants, c.Start, c.End, c.Start_room, c.End_room, c.Rooms_coor)
 }

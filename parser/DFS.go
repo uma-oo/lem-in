@@ -184,6 +184,14 @@ func (G *Group) AppendPathToGroup(path_to_append *Path) {
 	}
 }
 
+
+
+
+
+
+
+
+
 //*********************************************************************************************************
 // THIS SECTION FOR SOME FUNCTIONS THAT COULD BE USED LATER
 

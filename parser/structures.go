@@ -9,8 +9,6 @@ type Room struct {
 	x     int
 	y     int
 	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
-	IsOccupied bool 
-	step int 
 }
 
 var combinaison = make(map[int]struct{})
@@ -56,19 +54,15 @@ type Traversal2 struct {
 	Queue     []*Node
 }
 
-// structs used for the printing process 
+// structs used for the printing process
 
 type Agent struct {
-	Name int
-	RoomOccupied *Room
-	PathUsed *Path
+	Name       int
+	PathUsed   *Path
 	HasArrived bool
-
+	Start_Step int
+	End_Step   int
 }
-
-
-
-
 
 var (
 	start_line      = regexp.MustCompile(`^##start\s*$`)
