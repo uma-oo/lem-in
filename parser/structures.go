@@ -57,11 +57,9 @@ type Traversal2 struct {
 // structs used for the printing process
 
 type Agent struct {
-	Name       int
+	Pos       int
 	PathUsed   *Path
-	HasArrived bool
-	Start_Step int
-	End_Step   int
+
 }
 
 var (

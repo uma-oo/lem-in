@@ -49,10 +49,7 @@ func NewGroup() *Group {
 
 func NewAgent() *Agent {
 	return &Agent{
-		Name:       0,
-		PathUsed:   NewPath(),
-		HasArrived: false,
-		Start_Step: 0,
-		End_Step: 0,
+		Pos:      0,
+		PathUsed: NewPath(),
 	}
 }

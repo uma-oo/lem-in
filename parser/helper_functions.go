@@ -80,6 +80,6 @@ func (c *Colony) String() string {
 
 // To debug the agent again and again
 func (a *Agent) String() string {
-	return fmt.Sprintf("Ant Name: %v, Path used: %v , Start Turn: %v , End Turn: %v", a.Name, a.PathUsed.String(), a.Start_Step, a.End_Step)
+	return fmt.Sprintf("Ant Position in the path: %v, Path used: %v", a.Pos, a.PathUsed.String())
 }
 
