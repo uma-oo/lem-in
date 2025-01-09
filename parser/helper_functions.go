@@ -82,4 +82,6 @@ func (c *Colony) String() string {
 func (a *Agent) String() string {
 	return fmt.Sprintf("Ant Position in the path: %v, Path used: %v", a.Pos, a.PathUsed.String())
 }
-
+func (t *Traversal) String() string{
+	return fmt.Sprintf("Is_visited map: %v, Visited_nodes: %v queue: %v", t.Is_Visited, t.Visited_Node, t.Queue)
+}

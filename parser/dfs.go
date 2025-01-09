@@ -1,9 +1,17 @@
 package parser
 
+import (
+	"fmt"
+	"runtime"
+	"slices"
+)
+
 // used BFS hna to determine levels
 // this is the implementation based on this stackoverflow question
 // link hahuwa for more details : https://stackoverflow.com/questions/14144071/finding-all-the-shortest-paths-between-two-nodes-in-unweighted-undirected-graph?rq=1
 // BFS + reverse DFS
+// This is the part where the memory is leaking
+// Problem detected is in the slice of strings that adds the same parent more than once
 func Levels(graph *Colony, start string, end string) map[string]int {
 	level := make(map[string]int)
 	var current string
@@ -24,14 +32,19 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 		for element := range graph.Tunnels[current].Links {
 			if _, ok := traversal.Visited_Node[element]; !ok {
 				traversal.Is_Visited[current] = true
-				traversal.Visited_Node[element] = append(traversal.Visited_Node[element], current)
+				if !slices.Contains(traversal.Visited_Node[element], current) {
+					traversal.Visited_Node[element] = append(traversal.Visited_Node[element], current)
+				}
+
 				level[element] = level[current] + 1
+				
 				node_element := SetNode(element)
 				traversal.Queue = append(traversal.Queue, node_element)
-				level[element] = level[current] + 1
+				printAlloc()
+
 			} else {
 				for _, parent := range traversal.Visited_Node[element] {
-					if SameLevel(parent, current, level) {
+					if SameLevel(parent, current, level) && !slices.Contains(traversal.Visited_Node[element], current) {
 						traversal.Visited_Node[element] = append(traversal.Visited_Node[element], current)
 					}
 				}
@@ -184,13 +197,11 @@ func (G *Group) AppendPathToGroup(path_to_append *Path) {
 	}
 }
 
-
-
-
-
-
-
-
+func printAlloc() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	fmt.Printf("%d MB\n", m.Alloc/(1024*1024))
+}
 
 //*********************************************************************************************************
 // THIS SECTION FOR SOME FUNCTIONS THAT COULD BE USED LATER
