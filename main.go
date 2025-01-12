@@ -30,12 +30,12 @@ func main() {
 		// 	fmt.Printf("group: %v %v turns: %v\n", i, g.String(), g.Turns)
 		// }
 		// fmt.Println()
-        // fmt.Println(colony.String())
+		// fmt.Println(colony.String())
 		best := p.FindTheBestGrp(colony)
 		fmt.Println("Found the best!")
 		// fmt.Printf("best: %v\n", best.String())
-		// best.CalculTurns(colony)
-		// fmt.Printf("best.Turns: %v\n", best.Turns)
+		best.CalculTurns(colony)
+		fmt.Printf("best.Turns: %v\n", best.Turns)
 		// fmt.Println()
 
 		// best.CalculTurns(colony)
@@ -46,12 +46,11 @@ func main() {
 		// ants := best.InitializeMvt(colony)
 		// p.Levels(colony, colony.Start_room.Name, colony.End_room.Name)
 
-		
 		//**************************************************************************//
-		lines := best.MoveAnts(colony)
-		for _, line := range lines {
-			fmt.Print(line)
-		}
+		best.MoveAnts(colony)
+		// for _, line := range lines {
+		// 	fmt.Print(line)
+		// }
 		//*************************************************************************//
 		// for _, ant := range ants {
 		// 	fmt.Println(ant.String())

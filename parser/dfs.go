@@ -22,7 +22,7 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 	traversal.Queue = append(traversal.Queue, start_element) // appendiw element lwlani l queue
 	level[start] = 1
 	level[graph.Start_room.Name] = 0
-
+   
 	for len(traversal.Queue) > 0 {
 		current = traversal.Pop()
 		if current == end {
@@ -40,7 +40,7 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 				
 				node_element := SetNode(element)
 				traversal.Queue = append(traversal.Queue, node_element)
-				printAlloc()
+				// printAlloc()
 
 			} else {
 				for _, parent := range traversal.Visited_Node[element] {
@@ -51,6 +51,8 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 			}
 		}
 	}
+	// fmt.Println("level",level)
+	// fmt.Println(traversal.String())
 
 	return level
 }
@@ -64,6 +66,9 @@ func DFS(graph *Colony, start string) [][]string {
 	visited := make(map[string]bool)
 	visited[graph.Start_room.Name] = true
 	levels := Levels(graph, start, graph.End_room.Name)
+	fmt.Println("here the levels")
+	// To be done tomorrow !!!
+	
 	var dfsHelper func(current string, path []string)
 	dfsHelper = func(current string, path []string) {
 		if current == start {

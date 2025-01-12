@@ -9,7 +9,7 @@ import (
 // on the one who will minimise the number of turns and so on til reaching the last group
 // This is used here just to be able to optimize the memory usage !!!
 
-// there is one some edge cases where we'll be having the worst case of passing through all the possible solution
+// there is one some edge cases where we'll be having the worst case of passing through all the possible solution (it's not anymore the edge case it's the rule)
 // the case of 1 ANT , we need to favorise the shortest path of all the graph
 
 
@@ -46,7 +46,7 @@ func (G *Group) InitializeMvt(graph *Colony) []*Agent {
 						Agents_slice = append(Agents_slice, new_ant)
 
 					}
-					is_filled = true
+					is_filled = true 
 
 				}
 			}
@@ -79,7 +79,7 @@ func (g *Group) MoveAnts(graph *Colony) []string {
 
 		}
 		line += "\n"
-		lines = append(lines, line)
+		fmt.Print(line)
 		// positions = nil
 	}
 	return lines
@@ -99,6 +99,13 @@ func (A *Agent) FindPath(ant int, graph *Colony, group_chosen *Group, agents map
 	shortest_path := group_chosen.ReturnShortest()
 	A.PathUsed = shortest_path
 }
+
+
+// The idea is as follows
+// if the path has been taken by another ant meaning by this, it's not her first time to appear
+// we index the ant using the Pos and the Pos means only that it's the first the second or the third in the path
+// like having a primary key (path , pos) pos reflects the turn for that specific path 
+
 
 func (A *Agent) CountPath(agents []*Agent) {
 	count := 1
