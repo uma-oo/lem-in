@@ -23,12 +23,16 @@ func main() {
 			return
 		}
 
-	
-
-		//colony.PrintLinks(colony.Tunnels)
-		fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
+		// colony.PrintLinks(colony.Tunnels)
+		// fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
+		// groups := p.FindAllGroups(colony)
+		// for _,group := range groups {
+		// 	fmt.Println(group.String())
+		// 	group.CalculTurns(colony)
+		// 	fmt.Println(group.Turns)
+		// }
 		best := p.FindTheBestGrp(colony)
-		// fmt.Printf("best: %v\n", best.String())
+		fmt.Printf("best: %v\n", best.String())
 		// best.CalculTurns(colony)
 		// fmt.Printf("best.Turns: %v\n", best.Turns)
 		// fmt.Println()
@@ -43,6 +47,9 @@ func main() {
 
 		//**************************************************************************//
 		best.MoveAnts(colony)
+		
+		
+        
 		// for _, line := range lines {
 		// 	fmt.Print(line)
 		// }

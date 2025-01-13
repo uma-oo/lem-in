@@ -20,9 +20,13 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 	traversal.Visited_Node[start] = []string{}               // set that way to be known as the base case where the program will stop
 	start_element := SetNode(start)                          // kaykunu 3ndna string khasshum yt7wlu t structs li 3ndna
 	traversal.Queue = append(traversal.Queue, start_element) // appendiw element lwlani l queue
-	level[start] = 1
+
 	level[graph.Start_room.Name] = 0
-   
+
+	if start != graph.Start_room.Name {
+		level[start] = 1
+	}
+
 	for len(traversal.Queue) > 0 {
 		current = traversal.Pop()
 		if current == end {
@@ -37,7 +41,7 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 				}
 
 				level[element] = level[current] + 1
-				
+
 				node_element := SetNode(element)
 				traversal.Queue = append(traversal.Queue, node_element)
 				// printAlloc()
@@ -61,43 +65,22 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 // does not work well for all the cases somehow for the G0 case it fails to find the path G0-C0....
 // This is my be due to the fact this path is not the shortest at all and so we will be needing to use the BFS in this case
 
-func DFS(graph *Colony, start string) [][]string {
-	var trajectories [][]string
-	visited := make(map[string]bool)
-	visited[graph.Start_room.Name] = true
-	levels := Levels(graph, start, graph.End_room.Name)
-	fmt.Println("here the levels")
-	// To be done tomorrow !!!
-	
-	var dfsHelper func(current string, path []string)
-	dfsHelper = func(current string, path []string) {
-		if current == start {
-			// Make a copy of the path and add it to trajectories
-			// without this hadshi makaykhdmsh
-			// ;)
 
-			pathCopy := make([]string, len(path))
-			copy(pathCopy, path)
-			//printAlloc()
-			trajectories = append(trajectories, pathCopy)
-			return
-		}
-
-		visited[current] = true
-		for neighbor := range graph.Tunnels[current].Links {
-			if !visited[neighbor] && levels[neighbor] < levels[current] {
-				dfsHelper(neighbor, append([]string{neighbor}, path...))
-			}
-		}
-		visited[current] = false
-	}
-
-	dfsHelper(graph.End_room.Name, []string{graph.End_room.Name})
-	return trajectories
-}
 
 func SameLevel(node string, another_node string, level map[string]int) bool {
 	return level[node] == level[another_node]
+}
+
+func ReconstructPaths(graph *Colony, start string, target string) [][]string {
+	paths_found := [][]string{}
+	levels := Levels(graph, start, graph.End_room.Name)
+	for neighbor := range graph.Tunnels[target].Links {
+		if levels[neighbor] == levels[target]-1 {
+			path := append(BFSOriented(graph, start, neighbor), target)
+			paths_found = append(paths_found, path)
+		}
+	}
+	return paths_found
 }
 
 // Here there still some things to improve
@@ -127,31 +110,28 @@ func FindOneGroup(graph *Colony, node string, shortest_path *Path) *Group {
 	return group
 }
 
-
-
-
 // THE FUNCTION WHICH WILL find the best group step by step without leaking the memery
 
 func FindTheBestGrp(graph *Colony) *Group {
 	good_group := NewGroup()
 	var is_first bool = false
-	counter:=0
+	counter := 0
 	for _, node := range Priority(graph) {
+		fmt.Println("Finding the paths for the node", node)
 		fmt.Println("Finding Groups")
-		shortest_paths := DFS(graph, node)
+		shortest_paths := ReconstructPaths(graph, node, graph.End_room.Name)
 		// hadi hna because not everytime ghanl9aw shortest b DFS khassna nrunniw BFS
-		if len(shortest_paths) == 0 {
-			shortest_paths = append(shortest_paths, BFS(graph, node))
-		}
-        fmt.Println("Found", counter)
+		// if len(shortest_paths) == 0 {
+		// 	shortest_paths = append(shortest_paths, BFS(graph, node))
+		// }
+		fmt.Println("Found", counter)
 		for _, short := range shortest_paths {
 			shortest_path := &Path{
 				Rooms_found: short,
 				Length:      len(short),
 			}
-             // if we  found a shortest path
-			
-            counter++
+			// if we  found a shortest path
+			counter++
 			if !is_first {
 				group := FindOneGroup(graph, node, shortest_path)
 				group.CalculTurns(graph)
@@ -190,3 +170,111 @@ func printAlloc() {
 }
 
 //*********************************************************************************************************
+
+func BFSOriented(graph *Colony, start_node string, end_node string) []string {
+	var current string
+	trajectory := []string{}                                 // The Path will be found
+	var traversal *Traversal = NewTraversal()                // Initilaize dakshi lkula traversal
+	traversal.Visited_Node[start_node] = []string{}          // element lwl visited
+	start_element := SetNode(start_node)                     // kaykunu 3ndna string khasshum yt7wlu t structs li 3ndna
+	traversal.Queue = append(traversal.Queue, start_element) // appendiw element lwlani l queue
+
+	for len(traversal.Queue) > 0 {
+		current = traversal.Pop()
+		if current == end_node {
+			for len(traversal.Visited_Node[current]) != 0 { // base case ma7ddu mal9ash hadi donc mazal ma9ad l path
+				trajectory = append([]string{current}, trajectory...)
+				for _, parent := range traversal.Visited_Node[current] {
+					current = parent
+				}
+
+			}
+		}
+
+		for element := range graph.Tunnels[current].Links {
+
+			_, ok1 := traversal.Visited_Node[element]
+
+			if !ok1 {
+				traversal.Visited_Node[element] = append(traversal.Visited_Node[element], current)
+				node_element := SetNode(element)
+				traversal.Queue = append(traversal.Queue, node_element)
+			}
+		}
+
+	}
+	if len(trajectory) != 0 || start_node == end_node { // edge case where the child of the start is the end itself or we didn't finc anything to add to the trajectory
+		trajectory = append([]string{start_node}, trajectory...)
+		return trajectory
+	}
+
+	return nil
+}
+//************************************************For Debuging******************************************************************************************//
+func FindAllGroups(graph *Colony) []*Group {
+	groups := []*Group{}
+	for _, node := range Priority(graph) {
+		shortest_paths := ReconstructPaths(graph, node, graph.End_room.Name)
+		// hadi hna because not everytime ghanl9aw shortest b DFS khassna nrunniw BFS
+		if len(shortest_paths) == 0 {
+			shortest_paths = append(shortest_paths, BFS(graph, node))
+		}
+
+		for _, short := range shortest_paths {
+			shortest_path := &Path{
+				Rooms_found: short,
+				Length:      len(short),
+			}
+			group := FindOneGroup(graph, node, shortest_path)
+			groups = append(groups, group)
+
+		}
+	}
+
+	return groups
+}
+
+
+
+
+
+
+
+
+
+
+
+func DFS(graph *Colony, start string) [][]string {
+	var trajectories [][]string
+	visited := make(map[string]bool)
+	visited[graph.Start_room.Name] = true
+	levels := Levels(graph, start, graph.End_room.Name)
+	fmt.Println("here the levels")
+	// To be done tomorrow !!!
+
+	var dfsHelper func(current string, path []string)
+	dfsHelper = func(current string, path []string) {
+		if current == start {
+			// Make a copy of the path and add it to trajectories
+			// without this hadshi makaykhdmsh
+			// ;)
+
+			pathCopy := make([]string, len(path))
+			copy(pathCopy, path)
+			// printAlloc()
+			trajectories = append(trajectories, pathCopy)
+			return
+		}
+
+		visited[current] = true
+		for neighbor := range graph.Tunnels[current].Links {
+			if !visited[neighbor] && levels[neighbor] < levels[current] {
+				dfsHelper(neighbor, append([]string{neighbor}, path...))
+			}
+		}
+		visited[current] = false
+	}
+
+	dfsHelper(graph.End_room.Name, []string{graph.End_room.Name})
+	return trajectories
+}
