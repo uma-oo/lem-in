@@ -8,50 +8,26 @@ import (
 // The idea behind is : to find the first group --> and then the second group, and keep only one of them based
 // on the one who will minimise the number of turns and so on til reaching the last group
 // This is used here just to be able to optimize the memory usage !!!
-
 // there is one some edge cases where we'll be having the worst case of passing through all the possible solution (it's not anymore the edge case it's the rule)
 // the case of 1 ANT , we need to favorise the shortest path of all the graph
-
-
 
 func (G *Group) InitializeMvt(graph *Colony) []*Agent {
 	var Agents map[int]*Agent = make(map[int]*Agent)
 	var Agents_slice []*Agent
-	shortest := G.Paths[0] // initial path
-	is_first := false
-	for i := 1; i <= G.Turns; i++ { // steps
-		is_filled := false
-		if !is_filled {
-			for j := 1; j <= graph.Ants; j++ {
-				if _, ok := Agents[j]; !ok {
-					if !is_first {
-						// First Ant to some inside the colony
-						ant := NewAgent()
-						ant.FindPath(j, graph, G, Agents)
-						ant.CountPath(Agents_slice)
-						// fmt.Printf("ant here inside : %v\n", ant)
-						shortest.Length += 1
-						is_first = true
-						Agents[j] = ant
-
-						Agents_slice = append(Agents_slice, ant)
-
-					} else {
-						shortest = G.ReturnShortest()
-						new_ant := NewAgent()
-						new_ant.FindPath(j, graph, G, Agents)
-						new_ant.CountPath(Agents_slice)
-						shortest.Length += 1
-						Agents[j] = new_ant
-						Agents_slice = append(Agents_slice, new_ant)
-
-					}
-					is_filled = true 
-
-				}
-			}
+	var shortest *Path // initial path
+	counter := 1
+	for j := 1; j <= graph.Ants; j++ {
+		if _, ok := Agents[j]; !ok {
+			shortest = G.ReturnShortest()
+			new_ant := NewAgent()
+			new_ant.FindPath(j, graph, G, Agents)
+			new_ant.CountPath(Agents_slice)
+			shortest.Length += 1
+			Agents[j] = new_ant
+			Agents_slice = append(Agents_slice, new_ant)
+			fmt.Printf("add %v ant\n", counter)
+			counter++
 		}
-
 	}
 	return Agents_slice
 }
@@ -100,12 +76,10 @@ func (A *Agent) FindPath(ant int, graph *Colony, group_chosen *Group, agents map
 	A.PathUsed = shortest_path
 }
 
-
 // The idea is as follows
 // if the path has been taken by another ant meaning by this, it's not her first time to appear
 // we index the ant using the Pos and the Pos means only that it's the first the second or the third in the path
-// like having a primary key (path , pos) pos reflects the turn for that specific path 
-
+// like having a primary key (path , pos) pos reflects the turn for that specific path
 
 func (A *Agent) CountPath(agents []*Agent) {
 	count := 1

@@ -22,7 +22,7 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 	traversal.Queue = append(traversal.Queue, start_element) // appendiw element lwlani l queue
 	level[start] = 1
 	level[graph.Start_room.Name] = 0
-   
+
 	for len(traversal.Queue) > 0 {
 		current = traversal.Pop()
 		if current == end {
@@ -120,7 +120,6 @@ func FindOneGroup(graph *Colony, node string, shortest_path *Path) *Group {
 				AddMapToAnotherMap(group.Visited_Nodes, path.Rooms_found[:len(path.Rooms_found)-1])
 				group.AppendPathToGroup(path)
 			}
-
 		}
 	}
 
