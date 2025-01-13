@@ -61,6 +61,7 @@ func Levels(graph *Colony, start string, end string) map[string]int {
 // we can have more than one shortest path
 // does not work well for all the cases somehow for the G0 case it fails to find the path G0-C0....
 // This is my be due to the fact this path is not the shortest at all and so we will be needing to use the BFS in this case
+
 func DFS(graph *Colony, start string) [][]string {
 	var trajectories [][]string
 	visited := make(map[string]bool)
