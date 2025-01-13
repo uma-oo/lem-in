@@ -21,7 +21,7 @@ func CheckAnts(line_content []byte) bool {
 
 func CheckIsRoom(line_number int, line []byte) (bool, [][]byte) {
 	if !CheckIsComment(line_number, line) {
-		chunks := bytes.Split(line, []byte(" "))
+		chunks := bytes.Fields(line)
 		if len(chunks) > 3 {
 			return false, nil
 		}
@@ -37,7 +37,6 @@ func CheckCoorIsDuplicate(x int, y int) error {
 		return errors.New("ERROR: The coordinates of this room already exist")
 	}
 	combinaison[value] = struct{}{}
-
 	return nil
 }
 
@@ -75,13 +74,38 @@ func Contains(path []string, room string) bool {
 
 // Just to debug the colony
 func (c *Colony) String() string {
-	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Rooms: %v )", c.Ants, c.Start, c.End, c.Start_room, c.End_room, c.Rooms_coor)
+	return fmt.Sprintf("Colony(Number of ants: %v, Start: %v, End: %v, Start Room: %v, End Room: %v , Tunnels:%v)", c.Ants, c.Start, c.End, c.Start_room, c.End_room, c.Tunnels)
+}
+
+func (r *Room) String() string {
+	return fmt.Sprintf("Room %v and its links are %v", r.Name, r.Links)
 }
 
 // To debug the agent again and again
 func (a *Agent) String() string {
 	return fmt.Sprintf("Ant Position in the path: %v, Path used: %v", a.Pos, a.PathUsed.String())
 }
-func (t *Traversal) String() string{
+
+func (t *Traversal) String() string {
 	return fmt.Sprintf("Is_visited map: %v, Visited_nodes: %v queue: %v", t.Is_Visited, t.Visited_Node, t.Queue)
+}
+
+// this function is here to just show us the links :<)=
+
+func (c *Colony) PrintLinks(links map[string]*Room) {
+	for key, value := range links {
+		fmt.Printf("the room  %s and the links are %v \n", key, value.Links)
+	}
+}
+
+func (P *Path) String() []string {
+	return P.Rooms_found
+}
+
+func (G *Group) String() [][]string {
+	paths := [][]string{}
+	for _, path := range G.Paths {
+		paths = append(paths, path.Rooms_found)
+	}
+	return paths
 }

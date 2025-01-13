@@ -17,25 +17,20 @@ func main() {
 			p.Error(err_exe)
 			return
 		}
-		err_struct := colony.CheckStruct(&colony)
+		err_struct := colony.CheckStruct()
 		if err_struct != nil {
 			p.Error(err_struct)
 			return
-
 		}
 
-		// groups2 := p.FindAllGroups(colony)
-		// for i, g := range groups2 {
-		// 	g.CalculTurns(colony)
-		// 	fmt.Printf("group: %v %v turns: %v\n", i, g.String(), g.Turns)
-		// }
-		// fmt.Println()
-		// fmt.Println(colony.String())
+	
+
+		//colony.PrintLinks(colony.Tunnels)
+		fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
 		best := p.FindTheBestGrp(colony)
-		fmt.Println("Found the best!")
 		// fmt.Printf("best: %v\n", best.String())
-		best.CalculTurns(colony)
-		fmt.Printf("best.Turns: %v\n", best.Turns)
+		// best.CalculTurns(colony)
+		// fmt.Printf("best.Turns: %v\n", best.Turns)
 		// fmt.Println()
 
 		// best.CalculTurns(colony)

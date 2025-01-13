@@ -49,19 +49,3 @@ func (G *Group) ReturnShortest() *Path {
 }
 
 //******************************************************************************************//
-
-// Not good for memory what if we have 10000 group
-func DecideWhichGroup(graph *Colony) *Group {
-	groups := FindAllGroups(graph)
-	chosen_group := groups[0]
-	groups[0].CalculTurns(graph)
-	min_turns := groups[0].Turns
-	for _, g := range groups {
-		g.CalculTurns(graph)
-		if min_turns < g.Turns {
-			min_turns = g.Turns
-			chosen_group = g
-		}
-	}
-	return chosen_group
-}

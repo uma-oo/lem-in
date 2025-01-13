@@ -1,9 +1,5 @@
 package parser
 
-import (
-	"math"
-)
-
 func DegreeNeighbors(graph *Colony) (string, map[string]struct{}) {
 	var min string
 	neigbors := make(map[string]struct{})
@@ -54,7 +50,6 @@ func DegreeNeighborsTwo(map_priority map[string]struct{}, graph *Colony) (string
 	return min, neigbors
 }
 
-
 func Priority(graph *Colony) []string {
 	arr_priority := []string{}
 	var (
@@ -78,29 +73,4 @@ func AddMapToAnotherMap(whole map[string]struct{}, part []string) {
 	for _, element := range part {
 		whole[element] = struct{}{}
 	}
-}
-
-
-// the bad room is always the first one to accur and second one and so on
-
-
-func AverageRoomLinks(graph *Colony) float64 {
-	var average int
-	for _, properties := range graph.Tunnels {
-		average += len(properties.Links)
-	}
-	return math.Round(float64(average / (len(graph.Tunnels)))) // -2 here is to exclude the start and the end
-}
-
-
-func (P *Path) String() []string {
-	return P.Rooms_found
-}
-
-func (G *Group) String() [][]string {
-	paths := [][]string{}
-	for _, path := range G.Paths {
-		paths = append(paths, path.Rooms_found)
-	}
-	return paths
 }

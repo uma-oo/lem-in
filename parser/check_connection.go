@@ -3,7 +3,6 @@ package parser
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"strconv"
 )
 
@@ -32,7 +31,7 @@ func HandleTunnels(col *Colony, line_content []byte, line int) error {
 		ok = ok1 && ok2
 		switch ok {
 		case false:
-			return errors.New("ERROR: the room in this tunnel doesn't exist " + strconv.Itoa(line))
+			return errors.New("ERROR: the room in this tunnel doesn't exist at line: " + strconv.Itoa(line))
 		case true:
 			err := CheckConnections2(string(chunks[0]), string(chunks[1]), col)
 			// err2 := CheckConnections2(string(chunks[1]), string(chunks[0]), col)
@@ -84,12 +83,4 @@ func CheckConnections2(room1_key string, room2_key string, col *Colony) error {
 	col.Tunnels[room2_key] = value2
 
 	return nil
-}
-
-// this function is here to just show us the links :<)=
-
-func (c *Colony) PrintLinks(links map[string]*Room) {
-	for key, value := range links {
-		fmt.Printf("the room  %s and the links are %v \n", key, value.Links)
-	}
 }

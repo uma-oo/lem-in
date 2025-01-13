@@ -63,11 +63,11 @@ type Agent struct {
 }
 
 var (
-	start_line      = regexp.MustCompile(`^##start\s*$`)
-	end_line        = regexp.MustCompile(`^##end\s*$`)
-	comment         = regexp.MustCompile("^#")
-	roomName        = regexp.MustCompile("^([^L#])[a-zA-Z0-9]*$")
-	roomCoordinates = regexp.MustCompile("-?[0-9]+")
+	start_line      = regexp.MustCompile(`^\s*##start\s*$`)
+	end_line        = regexp.MustCompile(`^\s*##end\s*$`)
+	comment         = regexp.MustCompile(`^\s*#`)
+	roomName        = regexp.MustCompile(`^\s*([^L#])[a-zA-Z0-9]*$`)
+	roomCoordinates = regexp.MustCompile(`-?[0-9]+`)
 	emptyline       = regexp.MustCompile(`^\s*$`) // matches a empty line or line with spaces
 
 )

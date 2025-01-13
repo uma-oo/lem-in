@@ -63,6 +63,10 @@ func Parse(filename string) (*Colony, error) {
 				start_room_found = true
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
+					err_coord := CheckCoorIsDuplicate(toInt(chunks[1]), toInt(chunks[2]))
+					if err_coord != nil {
+						return nil, err_coord
+					}
 					colony.Start_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
 					err := colony.addRoom(colony.Start_room)
 					if err != nil {
@@ -75,6 +79,10 @@ func Parse(filename string) (*Colony, error) {
 				end_room_found = true
 				ok, chunks := CheckIsRoom(line, scanner.Bytes())
 				if ok {
+					err_coord := CheckCoorIsDuplicate(toInt(chunks[1]), toInt(chunks[2]))
+					if err_coord != nil {
+						return nil, err_coord
+					}
 					colony.End_room.setRoom(string(chunks[0]), toInt(chunks[1]), toInt(chunks[2]))
 					err := colony.addRoom(colony.End_room)
 					if err != nil {
@@ -108,6 +116,3 @@ func Parse(filename string) (*Colony, error) {
 	}
 	return colony, nil
 }
-
-// Check if 2 rooms have the same coordinates block of fcts
-// use a hash function 
