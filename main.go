@@ -22,17 +22,17 @@ func main() {
 			p.Error(err_struct)
 			return
 		}
-
+        p.ReadFile(args[0])
+		fmt.Print("\n\n")
 		// colony.PrintLinks(colony.Tunnels)
 		// fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
-		// groups := p.FindAllGroups(colony)
-		// for _,group := range groups {
-		// 	fmt.Println(group.String())
-		// 	group.CalculTurns(colony)
-		// 	fmt.Println(group.Turns)
-		// }
+		groups := p.FindAllGroups(colony)
+		for _,group := range groups {
+			fmt.Println(group.String())
+			group.CalculTurns(colony)
+			fmt.Println(group.Turns)
+		}
 		best := p.FindTheBestGrp(colony)
-		fmt.Printf("best: %v\n", best.String())
 		// best.CalculTurns(colony)
 		// fmt.Printf("best.Turns: %v\n", best.Turns)
 		// fmt.Println()

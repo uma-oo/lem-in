@@ -17,7 +17,8 @@ func (G *Group) InitializeMvt(graph *Colony) []*Agent {
 	var Agents_slice []*Agent
 	shortest := G.Paths[0] // initial path
 	is_first := false
-    // This is the correct version of the function and nothing more or less 
+	// This is the correct version of the function and nothing more or less
+
 	for j := 1; j <= graph.Ants; j++ {
 		if _, ok := Agents[j]; !ok {
 			if !is_first {

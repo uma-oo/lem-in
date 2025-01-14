@@ -1,9 +1,11 @@
 package parser
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -108,4 +110,14 @@ func (G *Group) String() [][]string {
 		paths = append(paths, path.Rooms_found)
 	}
 	return paths
+}
+
+func ReadFile(filename string) {
+	file, _ := os.Open(filename)
+	scanner := bufio.NewScanner(file)
+
+	defer file.Close()
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 }
