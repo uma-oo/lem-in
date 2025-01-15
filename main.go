@@ -26,38 +26,20 @@ func main() {
 		fmt.Print("\n\n")
 		// colony.PrintLinks(colony.Tunnels)
 		// fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
-		groups := p.FindAllGroups(colony)
-		for _,group := range groups {
-			fmt.Println(group.String())
-			group.CalculTurns(colony)
-			fmt.Println(group.Turns)
-		}
+		// groups := p.FindAllGroups(colony)
+		// for _,group := range groups {
+		// 	fmt.Println(group.String())
+		// 	group.CalculTurns(colony)
+		// 	fmt.Println(group.Turns)
+		// }
 		best := p.FindTheBestGrp(colony)
+		// fmt.Println(best.String())
 		// best.CalculTurns(colony)
-		// fmt.Printf("best.Turns: %v\n", best.Turns)
-		// fmt.Println()
-
-		// best.CalculTurns(colony)
-		// fmt.Printf("best.Turns: %v\n", best.Turns)
-		// fmt.Println()
-		// best.CalculTurns(colony)
-		// fmt.Printf("best.Turns: %v\n", best.Turns)
-		// ants := best.InitializeMvt(colony)
-		// p.Levels(colony, colony.Start_room.Name, colony.End_room.Name)
+	
 
 		//**************************************************************************//
 		best.MoveAnts(colony)
 		
-		
-        
-		// for _, line := range lines {
-		// 	fmt.Print(line)
-		// }
-		//*************************************************************************//
-		// for _, ant := range ants {
-		// 	fmt.Println(ant.String())
-		// }
-
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}
