@@ -22,11 +22,12 @@ func main() {
 			p.Error(err_struct)
 			return
 		}
-        p.ReadFile(args[0])
+		p.ReadFile(args[0])
 		fmt.Print("\n\n")
 		// colony.PrintLinks(colony.Tunnels)
 		// fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
 		// groups := p.FindAllGroups(colony)
+		// p.PrintGroupsFound(groups)
 		// for _,group := range groups {
 		// 	fmt.Println(group.String())
 		// 	group.CalculTurns(colony)
@@ -35,11 +36,8 @@ func main() {
 		best := p.FindTheBestGrp(colony)
 		// fmt.Println(best.String())
 		// best.CalculTurns(colony)
-	
-
-		//**************************************************************************//
 		best.MoveAnts(colony)
-		
+
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}
@@ -54,6 +52,5 @@ func init() {
 	case !strings.HasSuffix(args[0], ".txt"):
 		p.Error("USAGE: go run . file.txt")
 		os.Exit(0)
-
 	}
 }

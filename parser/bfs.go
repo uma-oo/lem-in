@@ -45,13 +45,13 @@ func (G *Group) BaseBFS(graph *Colony, start_node string, end_node string) []str
 func (T *Traversal) Pop() string {
 	popped := T.Queue[0]
 	T.Queue = T.Queue[1:]
-	return popped.Name.Name
+	return popped.Name
 }
 
 func (T *Traversal2) Pop() string {
 	popped := T.Queue[0]
 	T.Queue = T.Queue[1:]
-	return popped.Name.Name
+	return popped.Name
 }
 
 

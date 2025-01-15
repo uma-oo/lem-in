@@ -17,7 +17,6 @@ func DegreeNeighbors(graph *Colony) (string, map[string]struct{}) {
 				min = element
 			}
 		}
-
 	}
 	delete(neigbors, min)
 	return min, neigbors
@@ -44,8 +43,8 @@ func DegreeNeighborsTwo(map_priority map[string]struct{}, graph *Colony) (string
 				min = element
 			}
 		}
-
 	}
+
 	delete(neigbors, min)
 	return min, neigbors
 }
@@ -65,7 +64,6 @@ func Priority(graph *Colony) []string {
 			arr_priority = append(arr_priority, min)
 		}
 	}
-
 	return arr_priority
 }
 

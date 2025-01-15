@@ -8,8 +8,6 @@ func (r *Room) setRoom(name string, x int, y int) {
 	r.y = y
 }
 
-
-
 // the function must check before adding a room to the colony
 
 func (c *Colony) addRoom(r ...*Room) error {
@@ -24,12 +22,8 @@ func (c *Colony) addRoom(r ...*Room) error {
 	return nil
 }
 
-
-
 func SetNode(name string) *Node {
 	return &Node{
-		Name: &Room{Name: name},
+		Room: &Room{Name: name},
 	}
 }
-
-

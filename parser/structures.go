@@ -6,9 +6,8 @@ import "regexp"
 
 type Room struct {
 	Name  string
-	x     int
-	y     int
-	Links map[string]struct{} // this hack is from srm so useful !!!!! // string hna hya l key o hya room name dyal link
+	x, y  int                 // Room coordinates
+	Links map[string]struct{} // Room links to other rooms
 }
 
 var combinaison = make(map[int]struct{})
@@ -27,7 +26,7 @@ type Colony struct {
 // The Structs used in the process of finding the paths
 
 type Node struct {
-	Name *Room
+	*Room
 }
 
 type Traversal struct {
@@ -57,9 +56,8 @@ type Traversal2 struct {
 // structs used for the printing process
 
 type Agent struct {
-	Pos       int
-	PathUsed   *Path
-
+	Pos      int
+	PathUsed *Path
 }
 
 var (
@@ -69,5 +67,4 @@ var (
 	roomName        = regexp.MustCompile(`^\s*([^L#])[a-zA-Z0-9]*$`)
 	roomCoordinates = regexp.MustCompile(`-?[0-9]+`)
 	emptyline       = regexp.MustCompile(`^\s*$`) // matches a empty line or line with spaces
-
 )
