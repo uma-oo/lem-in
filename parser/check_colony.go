@@ -2,6 +2,7 @@ package parser
 
 import (
 	"errors"
+	"fmt"
 )
 
 // after feeding the struct we need to make sure that we found and start and the end
@@ -10,6 +11,7 @@ import (
 // Empty the struct again
 
 func (c *Colony) CheckStruct() error {
+	fmt.Println(c.String())
 	if c.Start_room.Name == "" {
 		return errors.New("ERROR: The Start Command is Never Found")
 	} else if c.End_room.Name == "" {

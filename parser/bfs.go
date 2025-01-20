@@ -1,5 +1,10 @@
 package parser
 
+
+
+
+
+// BFS run on the whole graph to find the groups
 func (G *Group) BaseBFS(graph *Colony, start_node string, end_node string) []string {
 	var current string
 	trajectory := []string{}                  // The Path will be found
@@ -40,18 +45,6 @@ func (G *Group) BaseBFS(graph *Colony, start_node string, end_node string) []str
 	}
 
 	return nil
-}
-
-func (T *Traversal) Pop() string {
-	popped := T.Queue[0]
-	T.Queue = T.Queue[1:]
-	return popped.Name.Name
-}
-
-func (T *Traversal2) Pop() string {
-	popped := T.Queue[0]
-	T.Queue = T.Queue[1:]
-	return popped.Name.Name
 }
 
 

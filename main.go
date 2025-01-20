@@ -22,24 +22,17 @@ func main() {
 			p.Error(err_struct)
 			return
 		}
-        p.ReadFile(args[0])
+		p.ReadFile(args[0])
 		fmt.Print("\n\n")
-		// colony.PrintLinks(colony.Tunnels)
-		// fmt.Printf("Levels %v\n", p.Levels(colony, colony.Start_room.Name, colony.End_room.Name))
-		// groups := p.FindAllGroups(colony)
-		// for _,group := range groups {
-		// 	fmt.Println(group.String())
-		// 	group.CalculTurns(colony)
-		// 	fmt.Println(group.Turns)
-		// }
 		best := p.FindTheBestGrp(colony)
-		// fmt.Println(best.String())
-		// best.CalculTurns(colony)
-	
+		if best != nil {
+			fmt.Println(best.String())
+			best.MoveAnts(colony)
+		} else {
+			p.Error("No Valid Path Found on this Graph")
+			return
+		}
 
-		//**************************************************************************//
-		best.MoveAnts(colony)
-		
 	default:
 		fmt.Println("USAGE: go run . file.txt")
 	}

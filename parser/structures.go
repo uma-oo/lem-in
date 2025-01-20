@@ -57,9 +57,8 @@ type Traversal2 struct {
 // structs used for the printing process
 
 type Agent struct {
-	Pos       int
-	PathUsed   *Path
-
+	Pos      int
+	PathUsed *Path
 }
 
 var (

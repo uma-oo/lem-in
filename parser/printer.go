@@ -69,9 +69,7 @@ func (g *Group) MoveAnts(graph *Colony) []string {
 			}
 
 		}
-		line += "\n"
-		fmt.Print(line)
-		// positions = nil
+		fmt.Println(line)
 	}
 	return lines
 }
