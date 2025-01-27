@@ -3,31 +3,37 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
-	"lemin/helpers"
+	p "lemin/internal"
 )
 
 func main() {
 	args := os.Args[1:]
-	switch len(args) {
-	case 0:
-		fmt.Println("USAGE: go run . file.txt")
-	case 1:
-		colony, err_exe := helpers.Parse(args[0])
-		if err_exe != nil {
-			helpers.Error(err_exe)
-			return
-		}
-		err_struct := colony.CheckStruct(&colony)
-		if err_struct != nil {
-			helpers.Error(err_struct)
-			return
-			
-		}
-		fmt.Println(colony)
-		colony.PrintLinks(colony.Tunnels)
+	colony, err_exe := p.Parse(args[0])
+	if err_exe != nil {
+		p.Error(err_exe)
+		return
+	}
+	bestGroup := p.FindTheBestGrp(colony)
+	if len(bestGroup.Paths) != 0 {
+		p.ReadFile(args[0])
+		fmt.Println()
+		bestGroup.MoveAnts(colony)
+	} else {
+		p.Error("ERROR: No paths have been found.")
+		return
+	}
+}
 
-	default:
-		fmt.Println("USAGE: go run . file.txt")
+func init() {
+	args := os.Args[1:]
+	switch true {
+	case len(args) != 1:
+		p.Error("USAGE: go run . file.txt")
+		os.Exit(0)
+	case !strings.HasSuffix(args[0], ".txt"):
+		p.Error("USAGE: go run . file.txt")
+		os.Exit(0)
 	}
 }
